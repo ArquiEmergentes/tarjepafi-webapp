@@ -111,10 +111,6 @@
     "message": "Your role doesn't have permission to view this section. If you think this is a mistake, contact the administrator.",
     "goHome": "Go to home"
   },
-  "pendingPhase": {
-    "title": "Screen under construction",
-    "message": "This view is built in phase {{phase}} of Sprint 1."
-  },
   "credentials": {
     "title": "Credentials",
     "subtitle": "NFC cards issued to students, teachers and staff at the campus.",
@@ -466,6 +462,108 @@
       "incidentsTitle": "{{count}} open reader incidents",
       "incidentsDetail": "Check degraded readers or readers under maintenance."
     }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "subtitle": "Operational summary of the San Miguel Campus for the current day (simulated time).",
+    "live": "Live data · {{time}}",
+    "refresh": "Refresh",
+    "pendingShort": "{{count}} pend.",
+    "hourTooltip": "{{hour}}:00 · {{count}} taps",
+    "kpis": {
+      "attendance": "Today's attendance",
+      "attendanceCaption": "{{attended}} present or late · {{absent}} absent · {{pending}} pending",
+      "access": "Access granted today",
+      "accessCaption": "{{denied}} access denied",
+      "readers": "Readers online",
+      "readersCaption": "{{count}} offline",
+      "credentials": "Active credentials",
+      "credentialsCaption": "{{count}} blocked, lost or deactivated"
+    },
+    "sessions": {
+      "title": "Attendance by session",
+      "subtitle": "Students present or late over enrolled in today's classes",
+      "emptyTitle": "No classes today",
+      "emptyMessage": "When sessions are scheduled for the day they'll appear here."
+    },
+    "readers": {
+      "title": "IoT reader status",
+      "subtitle": "{{total}} registered NFC readers",
+      "offlineAlert": "{{id}} ({{name}}) hasn't communicated since {{time}}.",
+      "link": "Go to IoT readers"
+    },
+    "taps": {
+      "title": "Taps per hour",
+      "subtitle": "{{count}} NFC taps today up to the simulated time",
+      "emptyTitle": "No taps today yet",
+      "emptyMessage": "Tap a card in the simulator to see activity."
+    },
+    "credentials": {
+      "title": "Credentials by status",
+      "subtitle": "{{total}} issued cards",
+      "link": "Go to Credentials"
+    },
+    "recent": {
+      "title": "Recent activity",
+      "subtitle": "Latest attendance, access and work-shift taps at the campus",
+      "link": "View history",
+      "time": "Time",
+      "event": "Event",
+      "location": "Location",
+      "outcome": "Outcome"
+    }
+  },
+  "reports": {
+    "title": "Reports",
+    "subtitle": "Attendance, access and reader reports calculated from the data records.",
+    "generating": "Generating the report… it'll be ready in a few seconds.",
+    "exported": "Report exported as CSV.",
+    "exportError": "We couldn't export the report. Please try again.",
+    "exportCsv": "Export CSV",
+    "view": "View details",
+    "noData": "No data in this period",
+    "noDataMessage": "The report was generated with 0 records. Try another period.",
+    "listTitle": "Generated reports",
+    "listSubtitle": "From newest to oldest.",
+    "emptyTitle": "No reports yet",
+    "emptyMessage": "Generate your first report with the form above.",
+    "reportOf": "Report",
+    "dayTooltip": "{{date}} · {{count}} taps",
+    "notFoundTitle": "We couldn't find this report",
+    "notFoundMessage": "The link may be wrong or the report may no longer exist.",
+    "backToList": "Back to reports",
+    "generate": {
+      "title": "Generate report",
+      "hint": "Choose the type and adjust the period if needed. The summary is calculated from the data records (dataRecords).",
+      "submit": "Generate"
+    },
+    "fields": { "type": "Report type", "start": "From", "end": "To" },
+    "types": { "WEEKLY": "Weekly", "MONTHLY": "Monthly", "SEMESTER": "Semester" },
+    "columns": {
+      "period": "Period",
+      "status": "Status",
+      "records": "Records",
+      "generatedAt": "Generated",
+      "actions": "Actions"
+    },
+    "kpis": {
+      "attendance": "Attendance",
+      "granted": "Access granted",
+      "denied": "Access denied",
+      "peakHour": "Peak hour",
+      "incidents": "Readers with incidents"
+    },
+    "daily": {
+      "title": "Taps per day",
+      "subtitle": "{{total}} records in the period",
+      "date": "Day",
+      "readings": "Taps"
+    },
+    "states": {
+      "GENERATING": { "title": "Generating the report", "message": "We're calculating the summary. Refresh in a few seconds." },
+      "ERROR": { "title": "The report couldn't be generated", "message": "An error occurred while reading the records. Generate the report again." }
+    },
+    "errors": { "INVALID_PERIOD": "The period isn't valid." }
   },
   "tap": {
     "readerOutOfService": "Reader out of service",

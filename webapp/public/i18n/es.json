@@ -111,10 +111,6 @@
     "message": "Tu rol no tiene permiso para ver esta sección. Si crees que es un error, contacta al administrador.",
     "goHome": "Ir al inicio"
   },
-  "pendingPhase": {
-    "title": "Pantalla en construcción",
-    "message": "Esta vista se implementa en la fase {{phase}} del Sprint 1."
-  },
   "credentials": {
     "title": "Credenciales",
     "subtitle": "Tarjetas NFC asignadas a estudiantes, docentes y trabajadores de la sede.",
@@ -466,6 +462,108 @@
       "incidentsTitle": "{{count}} incidencias abiertas en lectores",
       "incidentsDetail": "Revisa los lectores degradados o en mantenimiento."
     }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "subtitle": "Resumen operativo de la Sede San Miguel para el día actual (hora simulada).",
+    "live": "Datos en vivo · {{time}}",
+    "refresh": "Actualizar",
+    "pendingShort": "{{count}} pend.",
+    "hourTooltip": "{{hour}}:00 · {{count}} lecturas",
+    "kpis": {
+      "attendance": "Asistencia del día",
+      "attendanceCaption": "{{attended}} presentes o tarde · {{absent}} ausentes · {{pending}} pendientes",
+      "access": "Accesos concedidos hoy",
+      "accessCaption": "{{denied}} accesos denegados",
+      "readers": "Lectores en línea",
+      "readersCaption": "{{count}} sin conexión",
+      "credentials": "Credenciales activas",
+      "credentialsCaption": "{{count}} bloqueadas, perdidas o desactivadas"
+    },
+    "sessions": {
+      "title": "Asistencia por sesión",
+      "subtitle": "Estudiantes presentes o tarde sobre matriculados en las clases de hoy",
+      "emptyTitle": "No hay clases hoy",
+      "emptyMessage": "Cuando haya sesiones programadas para el día aparecerán aquí."
+    },
+    "readers": {
+      "title": "Estado de lectores IoT",
+      "subtitle": "{{total}} lectores NFC registrados",
+      "offlineAlert": "{{id}} ({{name}}) no se comunica desde {{time}}.",
+      "link": "Ir a Lectores IoT"
+    },
+    "taps": {
+      "title": "Lecturas por hora",
+      "subtitle": "{{count}} lecturas NFC hoy hasta la hora simulada",
+      "emptyTitle": "Aún no hay lecturas hoy",
+      "emptyMessage": "Pasa una tarjeta en el simulador para ver la actividad."
+    },
+    "credentials": {
+      "title": "Credenciales por estado",
+      "subtitle": "{{total}} tarjetas emitidas",
+      "link": "Ir a Credenciales"
+    },
+    "recent": {
+      "title": "Actividad reciente",
+      "subtitle": "Últimas lecturas de asistencia, accesos y jornadas en la sede",
+      "link": "Ver historial",
+      "time": "Hora",
+      "event": "Evento",
+      "location": "Ubicación",
+      "outcome": "Resultado"
+    }
+  },
+  "reports": {
+    "title": "Reportes",
+    "subtitle": "Reportes de asistencia, accesos y lectores calculados desde los registros de datos.",
+    "generating": "Generando el reporte… estará listo en unos segundos.",
+    "exported": "Reporte exportado en CSV.",
+    "exportError": "No pudimos exportar el reporte. Inténtalo de nuevo.",
+    "exportCsv": "Exportar CSV",
+    "view": "Ver detalle",
+    "noData": "No hay datos en este periodo",
+    "noDataMessage": "El reporte se generó con 0 registros. Prueba con otro periodo.",
+    "listTitle": "Reportes generados",
+    "listSubtitle": "Del más reciente al más antiguo.",
+    "emptyTitle": "Aún no hay reportes",
+    "emptyMessage": "Genera tu primer reporte con el formulario de arriba.",
+    "reportOf": "Reporte",
+    "dayTooltip": "{{date}} · {{count}} lecturas",
+    "notFoundTitle": "No encontramos este reporte",
+    "notFoundMessage": "Puede que el enlace sea incorrecto o que el reporte ya no exista.",
+    "backToList": "Volver a reportes",
+    "generate": {
+      "title": "Generar reporte",
+      "hint": "Elige el tipo y ajusta el periodo si lo necesitas. El resumen se calcula desde los registros de datos (dataRecords).",
+      "submit": "Generar"
+    },
+    "fields": { "type": "Tipo de reporte", "start": "Desde", "end": "Hasta" },
+    "types": { "WEEKLY": "Semanal", "MONTHLY": "Mensual", "SEMESTER": "Semestral" },
+    "columns": {
+      "period": "Periodo",
+      "status": "Estado",
+      "records": "Registros",
+      "generatedAt": "Generado",
+      "actions": "Acciones"
+    },
+    "kpis": {
+      "attendance": "Asistencia",
+      "granted": "Accesos concedidos",
+      "denied": "Accesos denegados",
+      "peakHour": "Hora pico",
+      "incidents": "Lectores con incidencias"
+    },
+    "daily": {
+      "title": "Lecturas por día",
+      "subtitle": "{{total}} registros en el periodo",
+      "date": "Día",
+      "readings": "Lecturas"
+    },
+    "states": {
+      "GENERATING": { "title": "Generando el reporte", "message": "Estamos calculando el resumen. Actualiza en unos segundos." },
+      "ERROR": { "title": "No se pudo generar el reporte", "message": "Ocurrió un error al leer los registros. Genera el reporte otra vez." }
+    },
+    "errors": { "INVALID_PERIOD": "El periodo no es válido." }
   },
   "tap": {
     "readerOutOfService": "Lector fuera de servicio",

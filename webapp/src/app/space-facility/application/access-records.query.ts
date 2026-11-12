@@ -11,4 +11,8 @@ export class AccessRecordsQuery {
   all(): Promise<AccessRecord[]> {
     return firstValueFrom(this.api.getAll({ _sort: 'attemptedAt', _order: 'desc' }));
   }
+
+  between(start: string, end: string): Promise<AccessRecord[]> {
+    return firstValueFrom(this.api.getAll({ attemptedAt_gte: start, attemptedAt_lte: end }));
+  }
 }

@@ -53,7 +53,7 @@ import { toDisplayDate } from '../../../domain/date-time';
         (menuOpened)="refreshNotifications()"
         [attr.aria-label]="'header.notifications' | translate"
       >
-        <mat-icon [matBadge]="notifications().length || null" matBadgeSize="small" matBadgeColor="warn">notifications</mat-icon>
+        <mat-icon aria-hidden="false" [matBadge]="notifications().length || null" matBadgeSize="small" matBadgeColor="warn">notifications</mat-icon>
       </button>
       <mat-menu #notificationsMenu="matMenu" xPosition="before" class="tp-menu">
         <div class="menu-title">{{ 'header.notifications' | translate }}</div>

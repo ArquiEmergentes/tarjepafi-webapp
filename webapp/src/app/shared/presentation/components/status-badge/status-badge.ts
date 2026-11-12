@@ -7,7 +7,7 @@ export type BadgeKind =
   | 'credential' | 'reader' | 'session' | 'attendance' | 'decision' | 'user' | 'report'
   | 'enrollment' | 'shift' | 'incident' | 'outcome' | 'role' | 'space';
 
-interface BadgeStyle { tone: BadgeTone; icon: string }
+export interface BadgeStyle { tone: BadgeTone; icon: string }
 
 const STYLES: Record<BadgeKind, Record<string, BadgeStyle>> = {
   credential: {
@@ -79,6 +79,11 @@ const STYLES: Record<BadgeKind, Record<string, BadgeStyle>> = {
   },
 };
 
+/** Icono y tono de un estado (para que gráficos y badges usen la misma codificación). */
+export function badgeStyle(kind: BadgeKind, status: string): BadgeStyle {
+  return STYLES[kind][status] ?? { tone: 'neutral', icon: 'radio_button_unchecked' };
+}
+
 /** Badge de estado: siempre icono + texto. */
 @Component({
   selector: 'tp-status-badge',
@@ -107,7 +112,5 @@ export class StatusBadge {
   /** Clave i18n alternativa para el texto. */
   readonly label = input<string>();
 
-  protected readonly style = computed<BadgeStyle>(
-    () => STYLES[this.kind()][this.status()] ?? { tone: 'neutral', icon: 'radio_button_unchecked' },
-  );
+  protected readonly style = computed<BadgeStyle>(() => badgeStyle(this.kind(), this.status()));
 }

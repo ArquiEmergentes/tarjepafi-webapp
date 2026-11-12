@@ -1,0 +1,34 @@
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+  width: fit-content;
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+}
+:host ::ng-deep tp-page-header p {
+  text-transform: none;
+}
+.kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 24px;
+}
+.card-head {
+  margin-bottom: 16px;
+  p {
+    margin: 2px 0 0;
+    font-size: 12px;
+  }
+}
+.table-card {
+  padding: 0;
+  overflow: hidden;
+}
+.cap::first-letter {
+  text-transform: uppercase;
+}
