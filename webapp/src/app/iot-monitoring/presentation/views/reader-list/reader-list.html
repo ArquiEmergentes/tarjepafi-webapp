@@ -1,0 +1,155 @@
+<section class="tp-page">
+  <tp-page-header [title]="'readers.title' | translate" [subtitle]="'readers.subtitle' | translate">
+    <button mat-flat-button type="button" (click)="register()"><mat-icon>add</mat-icon>{{ 'readers.register.open' | translate }}</button>
+  </tp-page-header>
+
+  @if (loading()) {
+    <tp-skeleton variant="cards" [count]="4" />
+    <tp-skeleton variant="table" [count]="8" />
+  } @else if (failed()) {
+    <div class="tp-card">
+      <tp-empty-state icon="cloud_off" tone="error" [title]="'common.loadErrorTitle' | translate" [message]="'common.loadError' | translate">
+        <button mat-flat-button type="button" (click)="reload()"><mat-icon>refresh</mat-icon>{{ 'common.retry' | translate }}</button>
+      </tp-empty-state>
+    </div>
+  } @else {
+    <div class="kpis">
+      <tp-kpi-card [label]="'readers.kpis.total' | translate" [value]="total()" icon="sensors" tone="brand"
+        [caption]="'readers.kpis.totalCaption' | translate: { count: counts().DEGRADED }" />
+      <tp-kpi-card [label]="'readers.kpis.online' | translate" [value]="online()" [suffix]="'/ ' + total()" icon="check_circle" tone="success"
+        [caption]="'readers.kpis.onlineCaption' | translate" />
+      <tp-kpi-card [label]="'readers.kpis.offline' | translate" [value]="counts().OFFLINE" [suffix]="'/ ' + total()" icon="wifi_off" tone="error"
+        [caption]="'readers.kpis.offlineCaption' | translate" />
+      <tp-kpi-card [label]="'readers.kpis.maintenance' | translate" [value]="counts().MAINTENANCE" [suffix]="'/ ' + total()" icon="build" tone="warning"
+        [caption]="'readers.kpis.maintenanceCaption' | translate" />
+    </div>
+
+    <div class="status-chips" role="group" [attr.aria-label]="'readers.filters.status' | translate">
+      @for (s of statuses; track s) {
+        <button type="button" class="chip" [class.on]="status() === s" [attr.aria-pressed]="status() === s" (click)="toggleStatus(s)">
+          <tp-status-badge kind="reader" [status]="s" />
+          <strong>{{ counts()[s] }}</strong>
+        </button>
+      }
+    </div>
+
+    <div class="filters">
+      <mat-form-field class="f-select">
+        <mat-label>{{ 'readers.filters.location' | translate }}</mat-label>
+        <mat-select [value]="spaceId()" (valueChange)="spaceId.set($event)">
+          <mat-option value="ALL">{{ 'common.allFem' | translate }}</mat-option>
+          @for (s of spaces(); track s.id) {
+            <mat-option [value]="s.id">{{ s.code }} · {{ s.name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field class="f-select">
+        <mat-label>{{ 'readers.filters.type' | translate }}</mat-label>
+        <mat-select [value]="type()" (valueChange)="type.set($event)">
+          <mat-option value="ALL">{{ 'common.all' | translate }}</mat-option>
+          @for (t of types; track t) {
+            <mat-option [value]="t">{{ 'readers.types.' + t | translate }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field class="f-select">
+        <mat-label>{{ 'readers.filters.status' | translate }}</mat-label>
+        <mat-select [value]="status()" (valueChange)="status.set($event)">
+          <mat-option value="ALL">{{ 'common.all' | translate }}</mat-option>
+          @for (s of statuses; track s) {
+            <mat-option [value]="s">{{ 'status.reader.' + s | translate }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field class="f-search">
+        <mat-label>{{ 'common.search' | translate }}</mat-label>
+        <mat-icon matPrefix>search</mat-icon>
+        <input matInput [ngModel]="search()" (ngModelChange)="search.set($event)" [placeholder]="'readers.filters.searchPlaceholder' | translate" />
+      </mat-form-field>
+    </div>
+
+    <article class="tp-card table-card">
+      <header class="table-head">
+        <div>
+          <h3>{{ 'readers.tableTitle' | translate }}</h3>
+          <p class="tp-muted">{{ 'readers.tableSubtitle' | translate }}</p>
+        </div>
+      </header>
+
+      @if (filtered().length === 0) {
+        <tp-empty-state icon="sensors_off" [title]="'readers.emptyTitle' | translate" [message]="'readers.emptyMessage' | translate">
+          @if (hasFilters()) {
+            <button mat-stroked-button type="button" (click)="clearFilters()">{{ 'common.clearFilters' | translate }}</button>
+          }
+        </tp-empty-state>
+      } @else {
+        <div class="tp-table-wrap">
+          <table class="tp-table">
+            <thead>
+              <tr>
+                <th>{{ 'readers.columns.reader' | translate }}</th>
+                <th>{{ 'readers.columns.location' | translate }}</th>
+                <th>{{ 'readers.columns.type' | translate }}</th>
+                <th>{{ 'readers.columns.lastSeen' | translate }}</th>
+                <th>{{ 'readers.columns.firmware' | translate }}</th>
+                <th>{{ 'readers.columns.status' | translate }}</th>
+                <th class="end">{{ 'readers.columns.actions' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (r of visible(); track r.id) {
+                <tr [class.busy]="busyId() === r.id">
+                  <td>
+                    <span class="reader">
+                      <span class="reader-icon"><mat-icon>sensors</mat-icon></span>
+                      <span><strong>{{ r.id }}</strong><small>{{ r.name }}</small></span>
+                    </span>
+                  </td>
+                  <td>{{ location(r) }}</td>
+                  <td class="nowrap">
+                    {{ 'readers.types.' + r.deviceType | translate }}
+                    <small class="mode">{{ 'readers.modes.' + r.configuration.readerMode | translate }}</small>
+                  </td>
+                  <td [class.stale]="isStale(r)">
+                    @if (lastSeen(r); as e) {
+                      {{ 'common.ago.' + e.unit | translate: { n: e.value } }}
+                    } @else {
+                      <span class="tp-muted">{{ 'readers.neverSeen' | translate }}</span>
+                    }
+                  </td>
+                  <td>{{ r.configuration.firmwareVersion }}</td>
+                  <td>
+                    <span class="status">
+                      <tp-status-badge kind="reader" [status]="r.status" />
+                      @if (openIncidentsByReader().get(r.id); as n) {
+                        <span class="incidents" [title]="'readers.openIncidents' | translate: { count: n }"><mat-icon>warning</mat-icon>{{ n }}</span>
+                      }
+                    </span>
+                  </td>
+                  <td class="end">
+                    <div class="row-actions">
+                      <a class="link" [routerLink]="['/admin/readers', r.id]">{{ 'credentials.viewDetail' | translate }}</a>
+                      @if (r.availableActions().length > 0) {
+                        <button mat-icon-button type="button" [matMenuTriggerFor]="menu" [attr.aria-label]="'credentials.moreActions' | translate">
+                          <mat-icon>more_vert</mat-icon>
+                        </button>
+                        <mat-menu #menu="matMenu" xPosition="before">
+                          @for (a of r.availableActions(); track a) {
+                            <button mat-menu-item (click)="run(r, a)">
+                              <mat-icon>{{ icon(a) }}</mat-icon>{{ 'readers.actions.' + a + '.short' | translate }}
+                            </button>
+                          }
+                        </mat-menu>
+                      }
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+        <tp-pagination [total]="filtered().length" [pageSize]="pageSize" [(page)]="page" />
+      }
+    </article>
+  }
+</section>
