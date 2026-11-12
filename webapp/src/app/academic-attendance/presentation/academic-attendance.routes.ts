@@ -1,9 +1,12 @@
 import { Routes } from '@angular/router';
-import { PendingPhasePage } from '../../shared/presentation/pages/pending-phase/pending-phase';
 
 export const TEACHER_ROUTES: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'sessions' },
-  { path: 'sessions', component: PendingPhasePage, data: { titleKey: 'nav.mySessions', phase: 4 } },
-  { path: 'attendance', component: PendingPhasePage, data: { titleKey: 'nav.myAttendance', phase: 4 } },
-  { path: 'meetings', component: PendingPhasePage, data: { titleKey: 'nav.myMeetings', phase: 4 } },
+  { path: 'sessions', loadComponent: () => import('./views/my-sessions/my-sessions').then((m) => m.MySessionsPage) },
+  {
+    path: 'sessions/:sessionId',
+    loadComponent: () => import('./views/session-detail/session-detail').then((m) => m.SessionDetailPage),
+  },
+  { path: 'attendance', loadComponent: () => import('./views/my-attendance/my-attendance').then((m) => m.MyAttendancePage) },
+  { path: 'meetings', loadComponent: () => import('./views/my-meetings/my-meetings').then((m) => m.MyMeetingsPage) },
 ];

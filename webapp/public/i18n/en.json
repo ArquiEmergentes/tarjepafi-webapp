@@ -92,7 +92,15 @@
     "status": "Account status",
     "email": "Email",
     "createdAt": "Account created",
-    "campus": "Campus"
+    "campus": "Campus",
+    "credential": "My credential",
+    "cardUid": "Card UID",
+    "cardStatus": "Card status",
+    "issuedAt": "Issued",
+    "lastUsed": "Last used",
+    "inactiveCard": "Your card isn't active. Visit university services to sort it out.",
+    "noCardTitle": "You don't have a card assigned",
+    "noCardMessage": "Visit university services to get your credential."
   },
   "comingSoon": {
     "title": "Your portal will be available soon",
@@ -457,6 +465,242 @@
       "offlineTitle": "{{id}} offline",
       "incidentsTitle": "{{count}} open reader incidents",
       "incidentsDetail": "Check degraded readers or readers under maintenance."
+    }
+  },
+  "tap": {
+    "readerOutOfService": "Reader out of service",
+    "cardNotRegistered": "Card not registered",
+    "cardInactive": "Inactive card. Visit university services",
+    "noClassInProgress": "There's no class in progress in this classroom",
+    "notEnrolled": "You're not enrolled in this class",
+    "alreadyRegistered": "Your attendance was already recorded",
+    "attendanceTaken": "Attendance recorded · {{course}} · {{time}}",
+    "noAssignedClass": "You have no class assigned in this classroom at this time",
+    "teacherArrival": "Arrival recorded · {{course}} · {{count}} attendances confirmed",
+    "teacherArrivalNoRecords": "Arrival recorded · {{course}} · No attendance recorded",
+    "teacherExit": "Exit recorded · Duration {{duration}}",
+    "exitAlreadyRegistered": "Your exit was already recorded",
+    "notInvited": "You're not invited to this meeting",
+    "meetingRegistered": "Attendance recorded · {{title}}",
+    "meetingRegisteredLate": "Attendance recorded as late · {{title}}",
+    "accessGranted": "Access granted",
+    "accessDenied": "Access denied",
+    "shiftOpened": "Entry recorded · Shift started",
+    "shiftAlreadyOpen": "Your shift is already open",
+    "shiftClosed": "Exit recorded · {{worked}} worked",
+    "noEntryFound": "No recorded entry was found",
+    "duplicateEvent": "Event already processed · not recorded again"
+  },
+  "spaces": {
+    "types": {
+      "CLASSROOM": "Classroom",
+      "CAMPUS_ENTRANCE": "Campus entrance",
+      "CAMPUS_EXIT": "Campus exit",
+      "RESTRICTED_AREA": "Restricted area",
+      "LABORATORY": "Laboratory",
+      "LIBRARY": "Library",
+      "MEETING_ROOM": "Meeting room",
+      "STUDY_CUBICLE": "Study cubicle"
+    }
+  },
+  "simulator": {
+    "title": "NFC reader simulator",
+    "subtitle": "Choose a reader and a card, adjust the simulated time and press \"Tap card\".",
+    "clock": {
+      "title": "Simulated time",
+      "hint": "Every time-based rule uses this time. When you move it forward, healthy readers send their heartbeat and overdue sessions are closed.",
+      "label": "Date and time",
+      "apply": "Apply",
+      "reset": "Reset",
+      "moved": "Simulated time: {{time}}"
+    },
+    "tap": {
+      "title": "Card tap",
+      "reader": "Reader",
+      "card": "Card",
+      "cardPlaceholder": "Search by name, code or UID",
+      "cardHint": "You can also type an unregistered UID, for example 04:FF:12:AB:90.",
+      "unknownCard": "Unregistered UID: the reader will reply \"Card not registered\".",
+      "submit": "Tap card"
+    },
+    "presets": {
+      "title": "Quick scenarios",
+      "studentClass": "Student in A-301",
+      "teacherClass": "Teacher in A-301",
+      "studentRestricted": "Student in Server Room",
+      "staffExit": "Staff at exit",
+      "unknownCard": "Unregistered card"
+    },
+    "screen": { "idle": "Hold your card near the reader" },
+    "duplicateNote": "Event {{id}} was already processed",
+    "replayed": "Event {{id}} was resent.",
+    "connectivity": {
+      "title": "Reader connectivity",
+      "hint": "Turn on a failure so the reader stops sending heartbeats. If you move the time more than 3 intervals forward, it will go Offline.",
+      "failure": "Failure",
+      "toggle": "Simulate connection failure",
+      "failureOn": "{{id}} stopped sending heartbeats.",
+      "failureOff": "{{id}} sends heartbeats again. Run a health check if it's offline."
+    },
+    "history": {
+      "title": "Tap history",
+      "subtitle": "Latest recorded taps (cardTapEvents).",
+      "time": "Time",
+      "card": "Holder / UID",
+      "outcome": "Outcome",
+      "message": "Reader message",
+      "replay": "Resend event (idempotency test)",
+      "unknownHolder": "No holder",
+      "emptyTitle": "No taps yet",
+      "emptyMessage": "Tap a card to see the result here."
+    },
+    "errors": {
+      "uid": "Enter a valid UID, for example 04:A2:7F:91:3C.",
+      "tapFailed": "We couldn't process the tap. Check that the API is running and try again."
+    }
+  },
+  "accessRecords": {
+    "title": "Access records",
+    "subtitle": "Access attempts to the campus and spaces, with the decision and its reason.",
+    "refresh": "Refresh",
+    "tableTitle": "Access taps",
+    "tableSubtitle": "From newest to oldest.",
+    "unknownHolder": "Unregistered card",
+    "emptyTitle": "No records match",
+    "emptyMessage": "Change the filters or tap a card in the simulator.",
+    "kpis": {
+      "total": "Attempts",
+      "granted": "Granted",
+      "grantedCaption": "{{rate}}% of attempts",
+      "denied": "Denied",
+      "topDenial": "Most frequent reason",
+      "topDenialCaption": "{{count}} denied attempts"
+    },
+    "filters": {
+      "decision": "Decision",
+      "type": "Type",
+      "space": "Space",
+      "searchPlaceholder": "Holder, code, UID or reader"
+    },
+    "columns": {
+      "date": "Date",
+      "holder": "Holder",
+      "space": "Space / reader",
+      "type": "Type",
+      "decision": "Decision",
+      "reason": "Reason"
+    },
+    "types": { "CAMPUS_ENTRY": "Campus entry", "CAMPUS_EXIT": "Campus exit", "SPACE_ACCESS": "Space access" },
+    "reasons": {
+      "NONE": "—",
+      "CARD_NOT_REGISTERED": "Card not registered",
+      "CARD_INACTIVE": "Inactive card",
+      "UNAUTHORIZED_ROLE": "No permission for the space",
+      "SPACE_IN_MAINTENANCE": "Space under maintenance"
+    }
+  },
+  "teacher": {
+    "sessions": {
+      "title": "My sessions",
+      "today": "Today",
+      "previousDay": "Previous day",
+      "nextDay": "Next day",
+      "next": "Next session",
+      "section": "Section",
+      "enrolled": "{{count}} enrolled",
+      "viewAttendance": "View attendance",
+      "todayTitle": "Today's sessions",
+      "dayTitle": "Sessions of the day",
+      "count": "Total: {{count}}",
+      "emptyTitle": "You have no classes this day",
+      "emptyMessage": "When you have scheduled classes they'll appear here with their room and time.",
+      "course": "Course",
+      "room": "Room",
+      "time": "Time",
+      "attendance": "Attendance",
+      "status": "Status",
+      "pending": "{{count}} pending",
+      "open": "Open"
+    },
+    "timing": {
+      "startsIn": "Starts in {{n}} min",
+      "open": "Check-in open",
+      "inProgress": "In progress",
+      "closing": "Closing soon",
+      "finished": "Finished"
+    },
+    "session": {
+      "myArrival": "My arrival",
+      "myExit": "My exit",
+      "duration": "Duration",
+      "tolerance": "Tolerance",
+      "punctualUntil": "on time until",
+      "notYet": "Not checked in yet",
+      "rate": "{{rate}}% attendance",
+      "unmarkedCount": "Includes {{count}} without a tap",
+      "pendingCaption": "Confirmed when you record your arrival",
+      "notStarted": "The session hasn't started yet. You'll be able to edit attendance once it's in progress or finished.",
+      "pendingBanner": "There are {{count}} pending attendances. They're confirmed as Present or Late based on each student's tap time.",
+      "confirmPending": "Confirm pending",
+      "confirmPendingTitle": "Confirm pending attendances",
+      "confirmPendingMessage": "{{count}} attendances will be confirmed as Present or Late based on each student's tap time.",
+      "pendingConfirmed": "{{count}} attendances confirmed.",
+      "rosterTitle": "Attendance list",
+      "rosterSubtitle": "{{count}} enrolled students",
+      "noRecordsTitle": "No attendance recorded",
+      "noRecordsMessage": "When your students tap their card on the classroom reader, they'll appear here.",
+      "student": "Student",
+      "status": "Status",
+      "checkIn": "Tap time",
+      "source": "Source",
+      "unmarked": "No tap",
+      "editedByTeacher": "Edited by the teacher",
+      "edit": "Edit",
+      "notFoundTitle": "We couldn't find this session",
+      "notFoundMessage": "It may not exist or it may not be one of your classes.",
+      "backToList": "Back to my sessions"
+    },
+    "sources": { "NFC": "NFC reader", "TEACHER_EDIT": "Teacher edit", "SYSTEM": "Automatic closing" },
+    "edit": {
+      "title": "Edit attendance",
+      "current": "Current status",
+      "newStatus": "New status",
+      "reason": "Reason (required)",
+      "reasonPlaceholder": "E.g.: the student submitted a medical note",
+      "save": "Save change",
+      "done": "{{name}}'s attendance updated."
+    },
+    "errors": {
+      "NOT_YOUR_SESSION": "You can only edit attendance for your own sessions.",
+      "SESSION_NOT_STARTED": "The session hasn't started yet. You'll be able to edit it once it's in progress or finished.",
+      "REASON_REQUIRED": "Enter a reason of up to 255 characters.",
+      "NOTHING_TO_CONFIRM": "There are no pending attendances to confirm.",
+      "SAVE_FAILED": "We couldn't save your changes. Check that the API is running and try again."
+    },
+    "myAttendance": {
+      "title": "My teaching attendance",
+      "subtitle": "Exact date and time of your arrival and exit, and the duration of each class.",
+      "classes": "Recorded classes",
+      "punctuality": "Punctuality",
+      "punctualityCaption": "Arrivals within the tolerance",
+      "taught": "Time taught",
+      "taughtCaption": "Total duration of your classes",
+      "history": "History",
+      "date": "Date",
+      "arrival": "Arrival",
+      "exit": "Exit",
+      "noExit": "No exit",
+      "inClass": "In class",
+      "emptyTitle": "You have no records yet",
+      "emptyMessage": "When you tap your card on the classroom reader, your arrival and exit will appear here."
+    },
+    "meetings": {
+      "title": "My meetings",
+      "subtitle": "Meetings and trainings you were invited to and your attendance.",
+      "markedAt": "Tapped at",
+      "upcoming": "Upcoming",
+      "emptyTitle": "You have no recorded meetings",
+      "emptyMessage": "When you're invited to a meeting or training it will appear here."
     }
   },
   "status": {
