@@ -1,0 +1,116 @@
+<section class="tp-page">
+  <tp-page-header [title]="'accessRecords.title' | translate" [subtitle]="'accessRecords.subtitle' | translate">
+    <button mat-stroked-button type="button" (click)="load()"><mat-icon>refresh</mat-icon>{{ 'accessRecords.refresh' | translate }}</button>
+  </tp-page-header>
+
+  @if (loading()) {
+    <tp-skeleton variant="cards" [count]="4" />
+    <tp-skeleton variant="table" [count]="8" />
+  } @else if (failed()) {
+    <div class="tp-card">
+      <tp-empty-state icon="cloud_off" tone="error" [title]="'common.loadErrorTitle' | translate" [message]="'common.loadError' | translate">
+        <button mat-flat-button type="button" (click)="load()"><mat-icon>refresh</mat-icon>{{ 'common.retry' | translate }}</button>
+      </tp-empty-state>
+    </div>
+  } @else {
+    <div class="kpis">
+      <tp-kpi-card [label]="'accessRecords.kpis.total' | translate" [value]="records().length" icon="door_open" tone="brand" />
+      <tp-kpi-card [label]="'accessRecords.kpis.granted' | translate" [value]="granted()" icon="check_circle" tone="success"
+        [caption]="'accessRecords.kpis.grantedCaption' | translate: { rate: grantedRate() }" />
+      <tp-kpi-card [label]="'accessRecords.kpis.denied' | translate" [value]="denied()" icon="block" tone="error" />
+      <tp-kpi-card [label]="'accessRecords.kpis.topDenial' | translate"
+        [value]="topDenial() ? ('accessRecords.reasons.' + topDenial()![0] | translate) : '—'"
+        [caption]="topDenial() ? ('accessRecords.kpis.topDenialCaption' | translate: { count: topDenial()![1] }) : ''"
+        icon="report" tone="warning" />
+    </div>
+
+    <div class="filters">
+      <mat-form-field class="f-select">
+        <mat-label>{{ 'accessRecords.filters.decision' | translate }}</mat-label>
+        <mat-select [value]="decision()" (valueChange)="decision.set($event)">
+          <mat-option value="ALL">{{ 'common.all' | translate }}</mat-option>
+          <mat-option value="GRANTED">{{ 'status.decision.GRANTED' | translate }}</mat-option>
+          <mat-option value="DENIED">{{ 'status.decision.DENIED' | translate }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field class="f-select">
+        <mat-label>{{ 'accessRecords.filters.type' | translate }}</mat-label>
+        <mat-select [value]="type()" (valueChange)="type.set($event)">
+          <mat-option value="ALL">{{ 'common.all' | translate }}</mat-option>
+          @for (t of types; track t) {
+            <mat-option [value]="t">{{ 'accessRecords.types.' + t | translate }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field class="f-select">
+        <mat-label>{{ 'accessRecords.filters.space' | translate }}</mat-label>
+        <mat-select [value]="spaceId()" (valueChange)="spaceId.set($event)">
+          <mat-option value="ALL">{{ 'common.all' | translate }}</mat-option>
+          @for (s of spaceList(); track s.id) {
+            <mat-option [value]="s.id">{{ s.code }} · {{ s.name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field class="f-search">
+        <mat-label>{{ 'common.search' | translate }}</mat-label>
+        <mat-icon matPrefix>search</mat-icon>
+        <input matInput [ngModel]="search()" (ngModelChange)="search.set($event)" [placeholder]="'accessRecords.filters.searchPlaceholder' | translate" />
+      </mat-form-field>
+    </div>
+
+    <article class="tp-card table-card">
+      <header class="table-head">
+        <h3>{{ 'accessRecords.tableTitle' | translate }}</h3>
+        <p class="tp-muted">{{ 'accessRecords.tableSubtitle' | translate }}</p>
+      </header>
+      @if (filtered().length === 0) {
+        <tp-empty-state icon="door_open" [title]="'accessRecords.emptyTitle' | translate" [message]="'accessRecords.emptyMessage' | translate">
+          @if (hasFilters()) {
+            <button mat-stroked-button type="button" (click)="clearFilters()">{{ 'common.clearFilters' | translate }}</button>
+          }
+        </tp-empty-state>
+      } @else {
+        <div class="tp-table-wrap">
+          <table class="tp-table">
+            <thead>
+              <tr>
+                <th>{{ 'accessRecords.columns.date' | translate }}</th>
+                <th>{{ 'accessRecords.columns.holder' | translate }}</th>
+                <th>{{ 'accessRecords.columns.space' | translate }}</th>
+                <th>{{ 'accessRecords.columns.type' | translate }}</th>
+                <th>{{ 'accessRecords.columns.decision' | translate }}</th>
+                <th>{{ 'accessRecords.columns.reason' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (r of visible(); track r.id) {
+                <tr>
+                  <td class="nowrap">{{ date(r) | date: 'EEE d MMM · HH:mm:ss' : 'UTC' : lang.locale() }}</td>
+                  <td>
+                    @if (r.cardHolderId && holders().get(r.cardHolderId); as h) {
+                      <span class="stack"><strong>{{ h.fullName }}</strong><small>{{ h.code }} · {{ 'roles.' + h.role | translate }} · <span class="uid">{{ r.cardUid }}</span></small></span>
+                    } @else {
+                      <span class="stack"><strong class="unknown">{{ 'accessRecords.unknownHolder' | translate }}</strong><small class="uid">{{ r.cardUid }}</small></span>
+                    }
+                  </td>
+                  <td>
+                    <span class="stack">
+                      <strong>{{ spaceById().get(r.spaceId)?.name ?? r.spaceId }}</strong>
+                      <small>{{ r.readerId }}</small>
+                    </span>
+                  </td>
+                  <td class="nowrap">{{ 'accessRecords.types.' + r.accessType | translate }}</td>
+                  <td><tp-status-badge kind="decision" [status]="r.decision" /></td>
+                  <td [class.reason]="r.denialReason !== 'NONE'">
+                    {{ r.denialReason === 'NONE' ? '—' : ('accessRecords.reasons.' + r.denialReason | translate) }}
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+        <tp-pagination [total]="filtered().length" [pageSize]="pageSize" [(page)]="page" />
+      }
+    </article>
+  }
+</section>

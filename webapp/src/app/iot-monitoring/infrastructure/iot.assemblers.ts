@@ -1,8 +1,9 @@
 import { BaseAssembler } from '../../shared/infrastructure/base-assembler';
+import { CardTapEvent } from '../domain/model/card-tap-event.entity';
 import { Incident } from '../domain/model/incident.entity';
 import { Reader } from '../domain/model/reader.entity';
 import { TelemetrySample } from '../domain/model/telemetry-sample.entity';
-import { IncidentResource, ReaderResource, TelemetryResource } from './iot.resources';
+import { CardTapEventResource, IncidentResource, ReaderResource, TelemetryResource } from './iot.resources';
 
 export class ReaderAssembler implements BaseAssembler<Reader, ReaderResource> {
   toEntityFromResource(r: ReaderResource): Reader {
@@ -20,6 +21,16 @@ export class TelemetryAssembler implements BaseAssembler<TelemetrySample, Teleme
   }
 
   toResourceFromEntity(e: TelemetrySample): TelemetryResource {
+    return { ...e.toProps() };
+  }
+}
+
+export class CardTapEventAssembler implements BaseAssembler<CardTapEvent, CardTapEventResource> {
+  toEntityFromResource(r: CardTapEventResource): CardTapEvent {
+    return new CardTapEvent(r);
+  }
+
+  toResourceFromEntity(e: CardTapEvent): CardTapEventResource {
     return { ...e.toProps() };
   }
 }

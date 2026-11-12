@@ -18,7 +18,10 @@ export type ReaderError =
   | 'TYPE_REQUIRED'
   | 'SPACE_REQUIRED'
   | 'NOT_ALLOWED'
+  | 'NO_RESPONSE'
   | 'SAVE_FAILED';
+
+const FAILING_KEY = 'tp.failingReaders';
 
 export type ReaderResult<T> = { ok: true; value: T } | { ok: false; errors: ReaderError[] };
 
@@ -47,9 +50,12 @@ export class ReadersStore {
 
   private readonly readerList = signal<Reader[]>([]);
   private readonly incidentList = signal<Incident[]>([]);
+  private readonly failingIds = signal<ReadonlySet<string>>(this.restoreFailing());
   private evaluating = false;
 
   readonly readers = this.readerList.asReadonly();
+  /** Lectores con falla de conexión simulada: no envían heartbeats ni responden health checks. */
+  readonly failing = this.failingIds.asReadonly();
   readonly incidents = this.incidentList.asReadonly();
   readonly loading = signal(false);
   readonly loadError = signal(false);
@@ -166,6 +172,7 @@ export class ReadersStore {
   async healthCheck(readerId: string): Promise<ReaderResult<HealthCheckResult>> {
     const reader = this.reader(readerId);
     if (!reader || !reader.isMonitored()) return { ok: false, errors: ['NOT_ALLOWED'] };
+    if (this.failingIds().has(readerId)) return { ok: false, errors: ['NO_RESPONSE'] };
     const now = this.clock.now();
     try {
       const previous = (await firstValueFrom(this.telemetry(readerId))).at(-1);
@@ -233,7 +240,60 @@ export class ReadersStore {
     return changed;
   }
 
+  // ---------- Simulación de conectividad (hora simulada) ----------
+
+  /** Activa o quita la falla de conexión simulada de un lector. */
+  setFailing(readerId: string, failing: boolean): void {
+    const next = new Set(this.failingIds());
+    if (failing) next.add(readerId);
+    else next.delete(readerId);
+    this.failingIds.set(next);
+    try {
+      localStorage.setItem(FAILING_KEY, JSON.stringify([...next]));
+    } catch {
+      // la simulación vive solo en memoria
+    }
+  }
+
+  /**
+   * Al adelantar la hora simulada, los lectores en servicio que estaban comunicándose envían su heartbeat
+   * en la nueva hora. Los que ya estaban sin comunicarse o tienen una falla simulada no lo envían.
+   */
+  async heartbeatHealthyReaders(previousNow: LocalDateTime, newNow: LocalDateTime): Promise<number> {
+    if (toMs(newNow) <= toMs(previousNow)) return 0;
+    await this.ensureLoaded();
+    const healthy = this.readerList().filter(
+      (r) => r.canProcessTaps() && !this.failingIds().has(r.id) && !r.hasLostConnection(previousNow),
+    );
+    for (const reader of healthy) {
+      try {
+        const saved = await firstValueFrom(this.readersApi.update(reader.heartbeat(newNow)));
+        this.readerList.update((list) => list.map((r) => (r.id === saved.id ? saved : r)));
+      } catch {
+        // si falla, la siguiente evaluación lo marcará sin conexión
+      }
+    }
+    return healthy.length;
+  }
+
+  /** Paso 5 del flujo de lectura: el lector se comunicó al procesar la lectura. */
+  async markSeen(readerId: string, at: LocalDateTime): Promise<void> {
+    const reader = this.reader(readerId);
+    if (!reader) return;
+    const saved = await firstValueFrom(this.readersApi.update(reader.seenAt(at)));
+    this.readerList.update((list) => list.map((r) => (r.id === saved.id ? saved : r)));
+  }
+
   // ---------- Internos ----------
+
+  private restoreFailing(): ReadonlySet<string> {
+    try {
+      const raw = localStorage.getItem(FAILING_KEY);
+      return new Set(raw ? (JSON.parse(raw) as string[]) : []);
+    } catch {
+      return new Set();
+    }
+  }
 
   private async openIncident(readerId: string, type: IncidentType, at: LocalDateTime, lastSeenAt: LocalDateTime | null): Promise<void> {
     try {

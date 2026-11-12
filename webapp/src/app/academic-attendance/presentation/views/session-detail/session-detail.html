@@ -1,0 +1,135 @@
+<section class="tp-page">
+  <a class="back" routerLink="/teacher/sessions"><mat-icon>arrow_back</mat-icon>{{ 'nav.mySessions' | translate }}</a>
+
+  @if (loading() && !detail()) {
+    <tp-skeleton variant="block" [count]="3" />
+    <tp-skeleton variant="cards" [count]="4" />
+    <tp-skeleton variant="table" [count]="6" />
+  } @else if (failed()) {
+    <div class="tp-card">
+      <tp-empty-state icon="cloud_off" tone="error" [title]="'common.loadErrorTitle' | translate" [message]="'common.loadError' | translate">
+        <button mat-flat-button type="button" (click)="load()"><mat-icon>refresh</mat-icon>{{ 'common.retry' | translate }}</button>
+      </tp-empty-state>
+    </div>
+  } @else if (detail(); as d) {
+    <tp-page-header
+      [title]="(d.course?.name ?? d.session.title) + ' · ' + (d.schedule?.section ?? '')"
+      [subtitle]="(d.course?.subject ?? '') + ' · ' + (spaceById().get(d.session.spaceId)?.name ?? d.session.spaceId) + ' · ' + ((date(d.session.scheduledStart) | date: 'EEE d MMM' : 'UTC' : lang.locale()) ?? '') + ' · ' + d.session.timeRange()"
+    >
+      <tp-status-badge kind="session" [status]="d.session.status" />
+    </tp-page-header>
+
+    <article class="tp-card teacher">
+      <span class="t-icon"><mat-icon>badge</mat-icon></span>
+      <div class="t-item">
+        <span class="label">{{ 'teacher.session.myArrival' | translate }}</span>
+        @if (d.teacherRecord?.checkInAt; as t) {
+          <strong>{{ date(t) | date: 'HH:mm:ss' : 'UTC' }}</strong>
+          <tp-status-badge kind="attendance" [status]="d.teacherRecord!.status" />
+        } @else {
+          <strong class="tp-muted">{{ 'teacher.session.notYet' | translate }}</strong>
+        }
+      </div>
+      <div class="t-item">
+        <span class="label">{{ 'teacher.session.myExit' | translate }}</span>
+        @if (d.teacherRecord?.checkOutAt; as t) {
+          <strong>{{ date(t) | date: 'HH:mm:ss' : 'UTC' }}</strong>
+        } @else {
+          <strong class="tp-muted">—</strong>
+        }
+      </div>
+      <div class="t-item">
+        <span class="label">{{ 'teacher.session.duration' | translate }}</span>
+        <strong>{{ duration(d.teacherRecord?.durationMinutes ?? null) }}</strong>
+      </div>
+      <div class="t-item">
+        <span class="label">{{ 'teacher.session.tolerance' | translate }}</span>
+        <strong>{{ d.session.toleranceMinutes }} min · {{ 'teacher.session.punctualUntil' | translate }} {{ date(d.session.punctualUntil()) | date: 'HH:mm' : 'UTC' }}</strong>
+      </div>
+    </article>
+
+    <div class="kpis">
+      <tp-kpi-card [label]="'status.attendance.PRESENT' | translate" [value]="d.counts.PRESENT" icon="check_circle" tone="success"
+        [caption]="'teacher.session.rate' | translate: { rate: attendanceRate() }" />
+      <tp-kpi-card [label]="'status.attendance.LATE' | translate" [value]="d.counts.LATE" icon="schedule" tone="warning" />
+      <tp-kpi-card [label]="'status.attendance.ABSENT' | translate" [value]="d.counts.ABSENT" icon="cancel" tone="error"
+        [caption]="d.counts.unmarked ? ('teacher.session.unmarkedCount' | translate: { count: d.counts.unmarked }) : ''" />
+      <tp-kpi-card [label]="'status.attendance.PENDING' | translate" [value]="d.counts.PENDING" icon="hourglass_top" tone="brand"
+        [caption]="'teacher.session.pendingCaption' | translate" />
+    </div>
+
+    @if (!editable()) {
+      <p class="banner banner--info"><mat-icon>info</mat-icon>{{ 'teacher.session.notStarted' | translate }}</p>
+    } @else if (d.counts.PENDING > 0) {
+      <div class="banner banner--warning">
+        <mat-icon>hourglass_top</mat-icon>
+        <span>{{ 'teacher.session.pendingBanner' | translate: { count: d.counts.PENDING } }}</span>
+        <button mat-flat-button type="button" [disabled]="busy()" (click)="confirmPending()">{{ 'teacher.session.confirmPending' | translate }}</button>
+      </div>
+    }
+
+    <article class="tp-card table-card">
+      <header class="table-head">
+        <h3>{{ 'teacher.session.rosterTitle' | translate }}</h3>
+        <p class="tp-muted">{{ 'teacher.session.rosterSubtitle' | translate: { count: d.roster.length } }}</p>
+      </header>
+      @if (!hasRecords()) {
+        <tp-empty-state icon="how_to_reg" [title]="'teacher.session.noRecordsTitle' | translate" [message]="'teacher.session.noRecordsMessage' | translate" />
+      }
+      @if (d.roster.length > 0) {
+        <div class="tp-table-wrap">
+          <table class="tp-table">
+            <thead>
+              <tr>
+                <th>{{ 'teacher.session.student' | translate }}</th>
+                <th>{{ 'teacher.session.status' | translate }}</th>
+                <th>{{ 'teacher.session.checkIn' | translate }}</th>
+                <th>{{ 'teacher.session.source' | translate }}</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (r of d.roster; track r.cardHolderId) {
+                <tr [class.busy]="busy()">
+                  <td><span class="stack"><strong>{{ r.fullName }}</strong><small>{{ r.code }}</small></span></td>
+                  <td>
+                    @if (r.record; as rec) {
+                      <tp-status-badge kind="attendance" [status]="rec.status" />
+                    } @else {
+                      <span class="tp-muted unmarked">{{ 'teacher.session.unmarked' | translate }}</span>
+                    }
+                  </td>
+                  <td class="nowrap">{{ r.record?.checkInAt ? (date(r.record!.checkInAt) | date: 'HH:mm:ss' : 'UTC') : '—' }}</td>
+                  <td>
+                    @if (r.record?.wasEditedByTeacher()) {
+                      <span class="edited" [matTooltip]="r.record!.editReason ?? ''">
+                        <mat-icon>edit_note</mat-icon>{{ 'teacher.session.editedByTeacher' | translate }}
+                      </span>
+                    } @else if (r.record) {
+                      <span class="tp-muted source">{{ 'teacher.sources.' + r.record.source | translate }}</span>
+                    } @else {
+                      <span class="tp-muted">—</span>
+                    }
+                  </td>
+                  <td class="end">
+                    @if (editable()) {
+                      <button mat-stroked-button type="button" [disabled]="busy()" (click)="edit(r)">
+                        <mat-icon>edit</mat-icon>{{ 'teacher.session.edit' | translate }}
+                      </button>
+                    }
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </article>
+  } @else {
+    <div class="tp-card">
+      <tp-empty-state icon="event_busy" [title]="'teacher.session.notFoundTitle' | translate" [message]="'teacher.session.notFoundMessage' | translate">
+        <a mat-stroked-button routerLink="/teacher/sessions">{{ 'teacher.session.backToList' | translate }}</a>
+      </tp-empty-state>
+    </div>
+  }
+</section>

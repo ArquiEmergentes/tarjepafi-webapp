@@ -1,0 +1,88 @@
+<section class="tp-page">
+  <tp-page-header [title]="'teacher.sessions.title' | translate" [subtitle]="(date(day() + 'T00:00:00') | date: 'fullDate' : 'UTC' : lang.locale()) ?? ''">
+    <div class="day-nav">
+      <button mat-icon-button type="button" (click)="shiftDay(-1)" [attr.aria-label]="'teacher.sessions.previousDay' | translate"><mat-icon>chevron_left</mat-icon></button>
+      <button mat-stroked-button type="button" [disabled]="isToday()" (click)="today()">{{ 'teacher.sessions.today' | translate }}</button>
+      <button mat-icon-button type="button" (click)="shiftDay(1)" [attr.aria-label]="'teacher.sessions.nextDay' | translate"><mat-icon>chevron_right</mat-icon></button>
+    </div>
+  </tp-page-header>
+
+  @if (loading()) {
+    <tp-skeleton variant="block" [count]="3" />
+    <tp-skeleton variant="table" [count]="3" />
+  } @else if (failed()) {
+    <div class="tp-card">
+      <tp-empty-state icon="cloud_off" tone="error" [title]="'common.loadErrorTitle' | translate" [message]="'common.loadError' | translate">
+        <button mat-flat-button type="button" (click)="load()"><mat-icon>refresh</mat-icon>{{ 'common.retry' | translate }}</button>
+      </tp-empty-state>
+    </div>
+  } @else {
+    @if (next(); as n) {
+      <article class="tp-card next">
+        <div class="next-main">
+          <span class="eyebrow">{{ 'teacher.sessions.next' | translate }}</span>
+          <h2>{{ n.course?.name ?? n.session.title }}</h2>
+          <p class="tp-muted">{{ n.course?.subject }} · {{ 'teacher.sessions.section' | translate }} {{ n.schedule?.section }}</p>
+          <div class="facts">
+            <span><mat-icon>schedule</mat-icon>{{ n.session.timeRange() }}</span>
+            <span><mat-icon>meeting_room</mat-icon>{{ spaceById().get(n.session.spaceId)?.name ?? n.session.spaceId }}</span>
+            <span><mat-icon>groups</mat-icon>{{ 'teacher.sessions.enrolled' | translate: { count: n.counts.total } }}</span>
+          </div>
+        </div>
+        <div class="next-side">
+          @if (timing(n); as t) {
+            <span class="timing">{{ t.key | translate: { n: t.n } }}</span>
+          }
+          <tp-status-badge kind="session" [status]="n.session.status" />
+          <a mat-flat-button [routerLink]="['/teacher/sessions', n.session.id]"><mat-icon>fact_check</mat-icon>{{ 'teacher.sessions.viewAttendance' | translate }}</a>
+        </div>
+      </article>
+    }
+
+    <article class="tp-card table-card">
+      <header class="table-head">
+        <h3>{{ (isToday() ? 'teacher.sessions.todayTitle' : 'teacher.sessions.dayTitle') | translate }}</h3>
+        <p class="tp-muted">{{ 'teacher.sessions.count' | translate: { count: sessions().length } }}</p>
+      </header>
+      @if (sessions().length === 0) {
+        <tp-empty-state icon="event_available" [title]="'teacher.sessions.emptyTitle' | translate" [message]="'teacher.sessions.emptyMessage' | translate" />
+      } @else {
+        <div class="tp-table-wrap">
+          <table class="tp-table">
+            <thead>
+              <tr>
+                <th>{{ 'teacher.sessions.course' | translate }}</th>
+                <th>{{ 'teacher.sessions.room' | translate }}</th>
+                <th>{{ 'teacher.sessions.time' | translate }}</th>
+                <th>{{ 'teacher.sessions.attendance' | translate }}</th>
+                <th>{{ 'teacher.sessions.status' | translate }}</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (s of sessions(); track s.session.id) {
+                <tr>
+                  <td>
+                    <span class="stack"><strong>{{ s.course?.name ?? s.session.title }}</strong><small>{{ s.course?.subject }} · {{ s.schedule?.section }}</small></span>
+                  </td>
+                  <td>{{ spaceById().get(s.session.spaceId)?.name ?? s.session.spaceId }}</td>
+                  <td class="nowrap">{{ s.session.timeRange() }}</td>
+                  <td>
+                    <span class="counts">
+                      <span [matTooltip]="'status.attendance.PRESENT' | translate">{{ attended(s) }}/{{ s.counts.total }}</span>
+                      @if (s.counts.PENDING) {
+                        <small class="pending">{{ 'teacher.sessions.pending' | translate: { count: s.counts.PENDING } }}</small>
+                      }
+                    </span>
+                  </td>
+                  <td><tp-status-badge kind="session" [status]="s.session.status" /></td>
+                  <td class="end"><a [routerLink]="['/teacher/sessions', s.session.id]">{{ 'teacher.sessions.open' | translate }}</a></td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </article>
+  }
+</section>

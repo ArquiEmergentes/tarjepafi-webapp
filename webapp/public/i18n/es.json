@@ -92,7 +92,15 @@
     "status": "Estado de la cuenta",
     "email": "Correo",
     "createdAt": "Cuenta creada",
-    "campus": "Sede"
+    "campus": "Sede",
+    "credential": "Mi credencial",
+    "cardUid": "UID de la tarjeta",
+    "cardStatus": "Estado de la tarjeta",
+    "issuedAt": "Emitida",
+    "lastUsed": "Último uso",
+    "inactiveCard": "Tu tarjeta no está activa. Acércate a servicios universitarios para regularizarla.",
+    "noCardTitle": "No tienes una tarjeta asignada",
+    "noCardMessage": "Acércate a servicios universitarios para que te entreguen tu credencial."
   },
   "comingSoon": {
     "title": "Tu portal estará disponible próximamente",
@@ -457,6 +465,242 @@
       "offlineTitle": "{{id}} sin conexión",
       "incidentsTitle": "{{count}} incidencias abiertas en lectores",
       "incidentsDetail": "Revisa los lectores degradados o en mantenimiento."
+    }
+  },
+  "tap": {
+    "readerOutOfService": "Lector fuera de servicio",
+    "cardNotRegistered": "Tarjeta no registrada",
+    "cardInactive": "Tarjeta inactiva. Acércate a servicios universitarios",
+    "noClassInProgress": "No hay una clase en curso en esta aula",
+    "notEnrolled": "No estás matriculado en esta clase",
+    "alreadyRegistered": "Tu asistencia ya fue registrada",
+    "attendanceTaken": "Asistencia tomada · {{course}} · {{time}}",
+    "noAssignedClass": "No tienes una clase asignada en esta aula a esta hora",
+    "teacherArrival": "Llegada registrada · {{course}} · {{count}} asistencias confirmadas",
+    "teacherArrivalNoRecords": "Llegada registrada · {{course}} · No existen asistencias registradas",
+    "teacherExit": "Salida registrada · Duración {{duration}}",
+    "exitAlreadyRegistered": "Tu salida ya fue registrada",
+    "notInvited": "No estás convocado a esta reunión",
+    "meetingRegistered": "Asistencia registrada · {{title}}",
+    "meetingRegisteredLate": "Asistencia registrada con tardanza · {{title}}",
+    "accessGranted": "Acceso concedido",
+    "accessDenied": "Acceso denegado",
+    "shiftOpened": "Entrada registrada · Jornada iniciada",
+    "shiftAlreadyOpen": "Tu jornada ya está abierta",
+    "shiftClosed": "Salida registrada · {{worked}} trabajadas",
+    "noEntryFound": "No se encontró una entrada registrada",
+    "duplicateEvent": "Evento ya procesado · no se registró de nuevo"
+  },
+  "spaces": {
+    "types": {
+      "CLASSROOM": "Aula",
+      "CAMPUS_ENTRANCE": "Entrada del campus",
+      "CAMPUS_EXIT": "Salida del campus",
+      "RESTRICTED_AREA": "Área restringida",
+      "LABORATORY": "Laboratorio",
+      "LIBRARY": "Biblioteca",
+      "MEETING_ROOM": "Sala de reuniones",
+      "STUDY_CUBICLE": "Cubículo de estudio"
+    }
+  },
+  "simulator": {
+    "title": "Simulador de lector NFC",
+    "subtitle": "Elige un lector y una tarjeta, ajusta la hora simulada y pulsa \"Pasar tarjeta\".",
+    "clock": {
+      "title": "Hora simulada",
+      "hint": "Todas las reglas de horario usan esta hora. Al adelantarla, los lectores sanos envían su heartbeat y se cierran las sesiones vencidas.",
+      "label": "Fecha y hora",
+      "apply": "Aplicar",
+      "reset": "Restablecer",
+      "moved": "Hora simulada: {{time}}"
+    },
+    "tap": {
+      "title": "Lectura",
+      "reader": "Lector",
+      "card": "Tarjeta",
+      "cardPlaceholder": "Busca por nombre, código o UID",
+      "cardHint": "También puedes escribir un UID que no esté registrado, por ejemplo 04:FF:12:AB:90.",
+      "unknownCard": "UID no registrado: el lector responderá \"Tarjeta no registrada\".",
+      "submit": "Pasar tarjeta"
+    },
+    "presets": {
+      "title": "Escenarios rápidos",
+      "studentClass": "Estudiante en A-301",
+      "teacherClass": "Docente en A-301",
+      "studentRestricted": "Estudiante en Sala de Servidores",
+      "staffExit": "Trabajador en salida",
+      "unknownCard": "Tarjeta no registrada"
+    },
+    "screen": { "idle": "Acerca tu tarjeta al lector" },
+    "duplicateNote": "El evento {{id}} ya fue procesado",
+    "replayed": "Se reenvió el evento {{id}}.",
+    "connectivity": {
+      "title": "Conectividad de lectores",
+      "hint": "Activa una falla para que el lector deje de enviar heartbeats. Al adelantar la hora más de 3 intervalos, pasará a Sin conexión.",
+      "failure": "Falla",
+      "toggle": "Simular falla de conexión",
+      "failureOn": "{{id}} dejó de enviar heartbeats.",
+      "failureOff": "{{id}} vuelve a enviar heartbeats. Ejecuta un health check si está sin conexión."
+    },
+    "history": {
+      "title": "Historial de lecturas",
+      "subtitle": "Últimas lecturas registradas (cardTapEvents).",
+      "time": "Hora",
+      "card": "Titular / UID",
+      "outcome": "Resultado",
+      "message": "Mensaje del lector",
+      "replay": "Reenviar evento (prueba de idempotencia)",
+      "unknownHolder": "Sin titular",
+      "emptyTitle": "Aún no hay lecturas",
+      "emptyMessage": "Pasa una tarjeta para ver aquí el resultado."
+    },
+    "errors": {
+      "uid": "Ingresa un UID válido, por ejemplo 04:A2:7F:91:3C.",
+      "tapFailed": "No pudimos procesar la lectura. Verifica que la API esté en ejecución e inténtalo de nuevo."
+    }
+  },
+  "accessRecords": {
+    "title": "Registros de acceso",
+    "subtitle": "Intentos de acceso al campus y a espacios, con la decisión y su motivo.",
+    "refresh": "Actualizar",
+    "tableTitle": "Lecturas de acceso",
+    "tableSubtitle": "Del más reciente al más antiguo.",
+    "unknownHolder": "Tarjeta no registrada",
+    "emptyTitle": "No hay registros que coincidan",
+    "emptyMessage": "Cambia los filtros o pasa una tarjeta en el simulador.",
+    "kpis": {
+      "total": "Intentos",
+      "granted": "Concedidos",
+      "grantedCaption": "{{rate}} % de los intentos",
+      "denied": "Denegados",
+      "topDenial": "Motivo más frecuente",
+      "topDenialCaption": "{{count}} intentos denegados"
+    },
+    "filters": {
+      "decision": "Decisión",
+      "type": "Tipo",
+      "space": "Espacio",
+      "searchPlaceholder": "Titular, código, UID o lector"
+    },
+    "columns": {
+      "date": "Fecha",
+      "holder": "Titular",
+      "space": "Espacio / lector",
+      "type": "Tipo",
+      "decision": "Decisión",
+      "reason": "Motivo"
+    },
+    "types": { "CAMPUS_ENTRY": "Ingreso al campus", "CAMPUS_EXIT": "Salida del campus", "SPACE_ACCESS": "Acceso a espacio" },
+    "reasons": {
+      "NONE": "—",
+      "CARD_NOT_REGISTERED": "Tarjeta no registrada",
+      "CARD_INACTIVE": "Tarjeta inactiva",
+      "UNAUTHORIZED_ROLE": "Sin permiso para el espacio",
+      "SPACE_IN_MAINTENANCE": "Espacio en mantenimiento"
+    }
+  },
+  "teacher": {
+    "sessions": {
+      "title": "Mis sesiones",
+      "today": "Hoy",
+      "previousDay": "Día anterior",
+      "nextDay": "Día siguiente",
+      "next": "Próxima sesión",
+      "section": "Sección",
+      "enrolled": "{{count}} matriculados",
+      "viewAttendance": "Ver asistencia",
+      "todayTitle": "Sesiones de hoy",
+      "dayTitle": "Sesiones del día",
+      "count": "Total: {{count}}",
+      "emptyTitle": "No tienes clases este día",
+      "emptyMessage": "Cuando tengas clases programadas aparecerán aquí con su aula y horario.",
+      "course": "Curso",
+      "room": "Aula",
+      "time": "Horario",
+      "attendance": "Asistencia",
+      "status": "Estado",
+      "pending": "{{count}} pendientes",
+      "open": "Abrir"
+    },
+    "timing": {
+      "startsIn": "Empieza en {{n}} min",
+      "open": "Marcación abierta",
+      "inProgress": "En curso",
+      "closing": "Por cerrar",
+      "finished": "Finalizada"
+    },
+    "session": {
+      "myArrival": "Mi llegada",
+      "myExit": "Mi salida",
+      "duration": "Duración",
+      "tolerance": "Tolerancia",
+      "punctualUntil": "puntual hasta las",
+      "notYet": "Aún no marcas",
+      "rate": "{{rate}} % de asistencia",
+      "unmarkedCount": "Incluye {{count}} sin marcación",
+      "pendingCaption": "Se confirman cuando marcas tu llegada",
+      "notStarted": "La sesión aún no inicia. Podrás editar la asistencia cuando esté en curso o finalizada.",
+      "pendingBanner": "Hay {{count}} asistencias pendientes. Se confirman como Presente o Tarde según la hora en que marcó cada estudiante.",
+      "confirmPending": "Confirmar pendientes",
+      "confirmPendingTitle": "Confirmar asistencias pendientes",
+      "confirmPendingMessage": "Se confirmarán {{count}} asistencias como Presente o Tarde según la hora de marcación de cada estudiante.",
+      "pendingConfirmed": "{{count}} asistencias confirmadas.",
+      "rosterTitle": "Lista de asistencia",
+      "rosterSubtitle": "{{count}} estudiantes matriculados",
+      "noRecordsTitle": "No existen asistencias registradas",
+      "noRecordsMessage": "Cuando tus estudiantes pasen su tarjeta por el lector del aula, aparecerán aquí.",
+      "student": "Estudiante",
+      "status": "Estado",
+      "checkIn": "Hora de marcación",
+      "source": "Origen",
+      "unmarked": "Sin marcación",
+      "editedByTeacher": "Editado por el docente",
+      "edit": "Editar",
+      "notFoundTitle": "No encontramos esta sesión",
+      "notFoundMessage": "Puede que no exista o que no sea una de tus clases.",
+      "backToList": "Volver a mis sesiones"
+    },
+    "sources": { "NFC": "Lector NFC", "TEACHER_EDIT": "Edición del docente", "SYSTEM": "Cierre automático" },
+    "edit": {
+      "title": "Editar asistencia",
+      "current": "Estado actual",
+      "newStatus": "Nuevo estado",
+      "reason": "Motivo (obligatorio)",
+      "reasonPlaceholder": "Ej.: el estudiante presentó justificación médica",
+      "save": "Guardar cambio",
+      "done": "Asistencia de {{name}} actualizada."
+    },
+    "errors": {
+      "NOT_YOUR_SESSION": "Solo puedes editar la asistencia de tus propias sesiones.",
+      "SESSION_NOT_STARTED": "La sesión aún no inicia. Podrás editarla cuando esté en curso o finalizada.",
+      "REASON_REQUIRED": "Ingresa un motivo de hasta 255 caracteres.",
+      "NOTHING_TO_CONFIRM": "No hay asistencias pendientes por confirmar.",
+      "SAVE_FAILED": "No pudimos guardar los cambios. Verifica que la API esté en ejecución e inténtalo de nuevo."
+    },
+    "myAttendance": {
+      "title": "Mi asistencia docente",
+      "subtitle": "Fecha y hora exactas de tu llegada y salida, y la duración de cada clase.",
+      "classes": "Clases registradas",
+      "punctuality": "Puntualidad",
+      "punctualityCaption": "Llegadas dentro de la tolerancia",
+      "taught": "Tiempo dictado",
+      "taughtCaption": "Suma de la duración de tus clases",
+      "history": "Historial",
+      "date": "Fecha",
+      "arrival": "Llegada",
+      "exit": "Salida",
+      "noExit": "Sin salida",
+      "inClass": "En clase",
+      "emptyTitle": "Aún no tienes registros",
+      "emptyMessage": "Cuando pases tu tarjeta por el lector del aula, tu llegada y salida aparecerán aquí."
+    },
+    "meetings": {
+      "title": "Mis reuniones",
+      "subtitle": "Reuniones y capacitaciones a las que fuiste convocado y tu asistencia.",
+      "markedAt": "Marcó a las",
+      "upcoming": "Próxima",
+      "emptyTitle": "No tienes reuniones registradas",
+      "emptyMessage": "Cuando te convoquen a una reunión o capacitación aparecerá aquí."
     }
   },
   "status": {

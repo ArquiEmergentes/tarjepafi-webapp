@@ -1,0 +1,224 @@
+<section class="tp-page">
+  <tp-page-header [title]="'simulator.title' | translate" [subtitle]="'simulator.subtitle' | translate">
+    <a mat-stroked-button routerLink="/admin/access-records"><mat-icon>door_open</mat-icon>{{ 'nav.accessRecords' | translate }}</a>
+  </tp-page-header>
+
+  @if (loading()) {
+    <div class="layout">
+      <tp-skeleton variant="block" [count]="6" />
+      <tp-skeleton variant="block" [count]="4" />
+    </div>
+    <tp-skeleton variant="table" [count]="5" />
+  } @else if (failed()) {
+    <div class="tp-card">
+      <tp-empty-state icon="cloud_off" tone="error" [title]="'common.loadErrorTitle' | translate" [message]="'common.loadError' | translate">
+        <button mat-flat-button type="button" (click)="load()"><mat-icon>refresh</mat-icon>{{ 'common.retry' | translate }}</button>
+      </tp-empty-state>
+    </div>
+  } @else {
+    <div class="layout">
+      <!-- Configuración de la lectura -->
+      <div class="column">
+        <article class="tp-card">
+          <header class="card-head">
+            <h3><mat-icon>schedule</mat-icon>{{ 'simulator.clock.title' | translate }}</h3>
+            <strong class="now">{{ date(now()) | date: 'EEE d MMM y · HH:mm' : 'UTC' : lang.locale() }}</strong>
+          </header>
+          <p class="hint">{{ 'simulator.clock.hint' | translate }}</p>
+          <div class="clock">
+            <mat-form-field class="clock-input">
+              <mat-label>{{ 'simulator.clock.label' | translate }}</mat-label>
+              <input matInput type="datetime-local" step="60" [ngModel]="clockInput()" (ngModelChange)="clockInput.set($event)" />
+            </mat-form-field>
+            <button mat-stroked-button type="button" [disabled]="clockBusy()" (click)="applyClock()">{{ 'simulator.clock.apply' | translate }}</button>
+          </div>
+          <div class="nudges">
+            @for (m of [-15, 5, 15, 60]; track m) {
+              <button type="button" class="nudge" [disabled]="clockBusy()" (click)="moveClock(m)">{{ m > 0 ? '+' : '' }}{{ m }} min</button>
+            }
+            <button type="button" class="nudge" [disabled]="clockBusy()" (click)="resetClock()">
+              <mat-icon>restart_alt</mat-icon>{{ 'simulator.clock.reset' | translate }}
+            </button>
+            @if (clockBusy()) {
+              <mat-spinner diameter="18" />
+            }
+          </div>
+        </article>
+
+        <article class="tp-card">
+          <header class="card-head"><h3><mat-icon>contactless</mat-icon>{{ 'simulator.tap.title' | translate }}</h3></header>
+
+          <p class="label">{{ 'simulator.presets.title' | translate }}</p>
+          <div class="presets">
+            @for (p of presets; track p.key) {
+              <button type="button" class="preset" (click)="applyPreset(p)">{{ 'simulator.presets.' + p.key | translate }}</button>
+            }
+          </div>
+
+          <mat-form-field class="full">
+            <mat-label>{{ 'simulator.tap.reader' | translate }}</mat-label>
+            <mat-select [value]="readerId()" (valueChange)="readerId.set($event)">
+              @for (r of readers(); track r.id) {
+                <mat-option [value]="r.id">
+                  <span class="opt">{{ r.id }} · {{ r.name }} <small [class.off]="!r.canProcessTaps()">{{ 'status.reader.' + r.status | translate }}</small></span>
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+          @if (reader(); as r) {
+            <p class="reader-meta">
+              <tp-status-badge kind="reader" [status]="r.status" />
+              <span>{{ space()?.name }} · {{ 'spaces.types.' + (space()?.type ?? 'CLASSROOM') | translate }}</span>
+            </p>
+          }
+
+          <mat-form-field class="full">
+            <mat-label>{{ 'simulator.tap.card' | translate }}</mat-label>
+            <mat-icon matPrefix>credit_card</mat-icon>
+            <input
+              matInput
+              [ngModel]="uidInput()"
+              (ngModelChange)="uidInput.set($event); uidError.set(null)"
+              [matAutocomplete]="auto"
+              [placeholder]="'simulator.tap.cardPlaceholder' | translate"
+              autocomplete="off"
+            />
+            <mat-autocomplete #auto="matAutocomplete">
+              @for (c of cardOptions(); track c.credential.id) {
+                <mat-option [value]="c.credential.cardUid">
+                  <span class="opt">
+                    <strong>{{ c.holder?.fullName ?? ('credentials.unlinked' | translate) }}</strong>
+                    <small>{{ c.credential.cardUid }} · {{ c.holder ? ('roles.' + c.holder.role | translate) : '—' }} · {{ 'status.credential.' + c.credential.status | translate }}</small>
+                  </span>
+                </mat-option>
+              }
+            </mat-autocomplete>
+            <mat-hint>{{ 'simulator.tap.cardHint' | translate }}</mat-hint>
+          </mat-form-field>
+          <tp-field-error [message]="uidError() ? (uidError()! | translate) : null" />
+          @if (selectedCard(); as c) {
+            <p class="card-meta">
+              <tp-status-badge kind="credential" [status]="c.credential.status" />
+              <span>{{ c.holder?.fullName ?? ('credentials.unlinked' | translate) }}{{ c.holder ? ' · ' + c.holder.code : '' }}</span>
+            </p>
+          } @else if (uidInput().trim()) {
+            <p class="card-meta tp-muted"><mat-icon>help</mat-icon>{{ 'simulator.tap.unknownCard' | translate }}</p>
+          }
+
+          <button mat-flat-button class="tap-btn" type="button" [disabled]="busy() || !uidInput().trim()" (click)="tap()">
+            @if (busy()) {
+              <mat-spinner diameter="18" />
+            } @else {
+              <mat-icon>contactless</mat-icon>
+            }
+            {{ 'simulator.tap.submit' | translate }}
+          </button>
+        </article>
+      </div>
+
+      <!-- Pantalla del lector -->
+      <div class="column">
+        <article class="device">
+          <header>
+            <span class="led" [class.led--on]="reader()?.canProcessTaps()"></span>
+            <span>{{ reader()?.id }} · {{ reader()?.name }}</span>
+          </header>
+          <div class="screen" [class]="'screen screen--' + (last()?.result?.tone ?? 'idle')" aria-live="polite">
+            @if (last(); as l) {
+              <mat-icon class="screen-icon">{{ toneIcon(l.result.tone) }}</mat-icon>
+              <p class="screen-message">{{ l.result.messageKey | translate: l.result.params }}</p>
+              @if (l.holderName) {
+                <p class="screen-holder">{{ l.holderName }}</p>
+              }
+              <p class="screen-time">{{ date(l.event.tappedAt) | date: 'HH:mm:ss' : 'UTC' }} · {{ l.event.readerId }}</p>
+              @if (l.duplicate) {
+                <p class="screen-note">{{ 'simulator.duplicateNote' | translate: { id: l.event.id } }}</p>
+              }
+            } @else {
+              <mat-icon class="screen-icon">contactless</mat-icon>
+              <p class="screen-message">{{ 'simulator.screen.idle' | translate }}</p>
+            }
+          </div>
+          <footer>TarjePAFI · {{ 'header.campus' | translate }}</footer>
+        </article>
+
+        <article class="tp-card connectivity">
+          <header class="card-head">
+            <h3><mat-icon>wifi_tethering</mat-icon>{{ 'simulator.connectivity.title' | translate }}</h3>
+          </header>
+          <p class="hint">{{ 'simulator.connectivity.hint' | translate }}</p>
+          <ul>
+            @for (r of monitored(); track r.id) {
+              <li>
+                <div class="conn-reader">
+                  <strong>{{ r.id }}</strong>
+                  <small>
+                    {{ 'status.reader.' + r.status | translate }}
+                    @if (elapsed(r.lastSeenAt); as e) {
+                      · {{ 'common.ago.' + e.unit | translate: { n: e.value } }}
+                    }
+                  </small>
+                </div>
+                <mat-slide-toggle
+                  [checked]="failing().has(r.id)"
+                  (change)="toggleFailure(r, $event.checked)"
+                  [matTooltip]="'simulator.connectivity.toggle' | translate"
+                >
+                  {{ 'simulator.connectivity.failure' | translate }}
+                </mat-slide-toggle>
+              </li>
+            }
+          </ul>
+        </article>
+      </div>
+    </div>
+
+    <!-- Historial -->
+    <article class="tp-card table-card">
+      <header class="table-head">
+        <h3>{{ 'simulator.history.title' | translate }}</h3>
+        <p class="tp-muted">{{ 'simulator.history.subtitle' | translate }}</p>
+      </header>
+      @if (history().length === 0) {
+        <tp-empty-state icon="contactless" [title]="'simulator.history.emptyTitle' | translate" [message]="'simulator.history.emptyMessage' | translate" />
+      } @else {
+        <div class="tp-table-wrap">
+          <table class="tp-table">
+            <thead>
+              <tr>
+                <th>{{ 'simulator.history.time' | translate }}</th>
+                <th>{{ 'simulator.tap.reader' | translate }}</th>
+                <th>{{ 'simulator.history.card' | translate }}</th>
+                <th>{{ 'simulator.history.outcome' | translate }}</th>
+                <th>{{ 'simulator.history.message' | translate }}</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (e of history(); track e.id) {
+                <tr>
+                  <td class="nowrap">{{ date(e.tappedAt) | date: 'EEE d · HH:mm:ss' : 'UTC' : lang.locale() }}</td>
+                  <td><span class="stack"><strong>{{ e.readerId }}</strong><small>{{ readerName(e.readerId) }}</small></span></td>
+                  <td>
+                    <span class="stack">
+                      <strong>{{ holderByUid().get(e.cardUid)?.fullName ?? ('simulator.history.unknownHolder' | translate) }}</strong>
+                      <small class="uid">{{ e.cardUid }}</small>
+                    </span>
+                  </td>
+                  <td><tp-status-badge kind="outcome" [status]="e.outcome" /></td>
+                  <td class="message">{{ e.displayMessage }}</td>
+                  <td class="end">
+                    <button mat-icon-button type="button" [disabled]="busy()" (click)="replay(e)"
+                      [matTooltip]="'simulator.history.replay' | translate" [attr.aria-label]="'simulator.history.replay' | translate">
+                      <mat-icon>replay</mat-icon>
+                    </button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </article>
+  }
+</section>
