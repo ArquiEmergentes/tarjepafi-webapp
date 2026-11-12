@@ -1,0 +1,160 @@
+<section class="tp-page">
+  <tp-page-header [title]="'dashboard.title' | translate" [subtitle]="'dashboard.subtitle' | translate">
+    @if (data(); as d) {
+      <span class="live">
+        <span class="dot"></span>{{ 'dashboard.live' | translate: { time: (date(d.now) | date: 'HH:mm' : 'UTC') } }}
+      </span>
+    }
+    <button mat-stroked-button type="button" [disabled]="refreshing() || loading()" (click)="load()">
+      <mat-icon>refresh</mat-icon>{{ 'dashboard.refresh' | translate }}
+    </button>
+  </tp-page-header>
+
+  @if (loading()) {
+    <tp-skeleton variant="cards" [count]="4" />
+    <div class="grid-2"><tp-skeleton variant="block" [count]="5" /><tp-skeleton variant="block" [count]="5" /></div>
+    <tp-skeleton variant="table" [count]="6" />
+  } @else if (failed() && !data()) {
+    <div class="tp-card">
+      <tp-empty-state icon="cloud_off" tone="error" [title]="'common.loadErrorTitle' | translate" [message]="'common.loadError' | translate">
+        <button mat-flat-button type="button" (click)="load()"><mat-icon>refresh</mat-icon>{{ 'common.retry' | translate }}</button>
+      </tp-empty-state>
+    </div>
+  } @else if (data(); as d) {
+    <div class="kpis" [class.refreshing]="refreshing()">
+      <tp-kpi-card
+        [label]="'dashboard.kpis.attendance' | translate"
+        [value]="d.attendance.rate === null ? '—' : d.attendance.rate"
+        [suffix]="d.attendance.rate === null ? '' : '%'"
+        icon="how_to_reg"
+        tone="success"
+        [caption]="'dashboard.kpis.attendanceCaption' | translate: { attended: d.attendance.attended, absent: d.attendance.absent, pending: d.attendance.pending }"
+      />
+      <tp-kpi-card
+        [label]="'dashboard.kpis.access' | translate"
+        [value]="d.access.granted"
+        [suffix]="'/ ' + accessTotal()"
+        icon="door_open"
+        tone="brand"
+        [caption]="'dashboard.kpis.accessCaption' | translate: { denied: d.access.denied }"
+      />
+      <tp-kpi-card
+        [label]="'dashboard.kpis.readers' | translate"
+        [value]="online()"
+        [suffix]="'/ ' + d.readers.total"
+        icon="sensors"
+        [tone]="d.readers.offline.length ? 'warning' : 'success'"
+        [caption]="'dashboard.kpis.readersCaption' | translate: { count: d.readers.offline.length }"
+      />
+      <tp-kpi-card
+        [label]="'dashboard.kpis.credentials' | translate"
+        [value]="d.credentials.byStatus.ACTIVE"
+        [suffix]="'/ ' + d.credentials.total"
+        icon="badge"
+        tone="brand"
+        [caption]="'dashboard.kpis.credentialsCaption' | translate: { count: d.credentials.total - d.credentials.byStatus.ACTIVE }"
+      />
+    </div>
+
+    <div class="grid-2">
+      <article class="tp-card">
+        <header class="card-head">
+          <div>
+            <h3>{{ 'dashboard.sessions.title' | translate }}</h3>
+            <p class="tp-muted">{{ 'dashboard.sessions.subtitle' | translate }}</p>
+          </div>
+        </header>
+        @if (sessionBars().length === 0) {
+          <tp-empty-state icon="event_available" [title]="'dashboard.sessions.emptyTitle' | translate" [message]="'dashboard.sessions.emptyMessage' | translate" />
+        } @else {
+          <tp-bar-list [items]="sessionBars()" [max]="maxEnrolled()" [ariaLabel]="'dashboard.sessions.title' | translate" />
+        }
+      </article>
+
+      <article class="tp-card">
+        <header class="card-head">
+          <div>
+            <h3>{{ 'dashboard.readers.title' | translate }}</h3>
+            <p class="tp-muted">{{ 'dashboard.readers.subtitle' | translate: { total: d.readers.total } }}</p>
+          </div>
+        </header>
+        <tp-bar-list [items]="readerBars()" [max]="d.readers.total" [ariaLabel]="'dashboard.readers.title' | translate" />
+        @for (r of d.readers.offline; track r.id) {
+          <p class="alert">
+            <mat-icon>wifi_off</mat-icon>
+            <span>{{ 'dashboard.readers.offlineAlert' | translate: { id: r.id, name: r.name, time: (date(r.lastSeenAt) | date: 'd MMM · HH:mm' : 'UTC' : lang.locale()) ?? '—' } }}</span>
+          </p>
+        }
+        <a class="more" routerLink="/admin/readers">{{ 'dashboard.readers.link' | translate }}<mat-icon>arrow_forward</mat-icon></a>
+      </article>
+    </div>
+
+    <div class="grid-2">
+      <article class="tp-card">
+        <header class="card-head">
+          <div>
+            <h3>{{ 'dashboard.taps.title' | translate }}</h3>
+            <p class="tp-muted">{{ 'dashboard.taps.subtitle' | translate: { count: d.tapsToday } }}</p>
+          </div>
+        </header>
+        @if (d.tapsToday === 0) {
+          <tp-empty-state icon="contactless" [title]="'dashboard.taps.emptyTitle' | translate" [message]="'dashboard.taps.emptyMessage' | translate" />
+        } @else {
+          <tp-column-chart [points]="hourColumns()" [ariaLabel]="'dashboard.taps.title' | translate" />
+        }
+      </article>
+
+      <article class="tp-card">
+        <header class="card-head">
+          <div>
+            <h3>{{ 'dashboard.credentials.title' | translate }}</h3>
+            <p class="tp-muted">{{ 'dashboard.credentials.subtitle' | translate: { total: d.credentials.total } }}</p>
+          </div>
+        </header>
+        <tp-bar-list [items]="credentialBars()" [max]="d.credentials.total" [ariaLabel]="'dashboard.credentials.title' | translate" />
+        <a class="more" routerLink="/admin/credentials">{{ 'dashboard.credentials.link' | translate }}<mat-icon>arrow_forward</mat-icon></a>
+      </article>
+    </div>
+
+    <article class="tp-card table-card">
+      <header class="table-head">
+        <div>
+          <h3>{{ 'dashboard.recent.title' | translate }}</h3>
+          <p class="tp-muted">{{ 'dashboard.recent.subtitle' | translate }}</p>
+        </div>
+        <a mat-stroked-button routerLink="/admin/simulator">{{ 'dashboard.recent.link' | translate }}</a>
+      </header>
+      @if (d.recent.length === 0) {
+        <tp-empty-state icon="contactless" [title]="'dashboard.taps.emptyTitle' | translate" [message]="'dashboard.taps.emptyMessage' | translate" />
+      } @else {
+        <div class="tp-table-wrap">
+          <table class="tp-table">
+            <thead>
+              <tr>
+                <th>{{ 'dashboard.recent.time' | translate }}</th>
+                <th>{{ 'dashboard.recent.event' | translate }}</th>
+                <th>{{ 'dashboard.recent.location' | translate }}</th>
+                <th>{{ 'dashboard.recent.outcome' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (e of d.recent; track e.id) {
+                <tr>
+                  <td class="nowrap mono">{{ date(e.tappedAt) | date: 'HH:mm:ss' : 'UTC' }}</td>
+                  <td><span class="stack"><strong>{{ e.displayMessage }}</strong><small class="uid">{{ e.cardUid }}</small></span></td>
+                  <td>
+                    <span class="stack">
+                      <strong>{{ spaceName(d.readers.byId.get(e.readerId)?.spaceId) }}</strong>
+                      <small>{{ e.readerId }}</small>
+                    </span>
+                  </td>
+                  <td><tp-status-badge kind="outcome" [status]="e.outcome" /></td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </article>
+  }
+</section>

@@ -1,0 +1,112 @@
+<section class="tp-page">
+  <tp-page-header [title]="'reports.title' | translate" [subtitle]="'reports.subtitle' | translate" />
+
+  <article class="tp-card">
+    <header class="card-head">
+      <h3><mat-icon>add_chart</mat-icon>{{ 'reports.generate.title' | translate }}</h3>
+      <p class="tp-muted">{{ 'reports.generate.hint' | translate }}</p>
+    </header>
+    <form class="generate" (ngSubmit)="generate()">
+      <mat-form-field class="f-type">
+        <mat-label>{{ 'reports.fields.type' | translate }}</mat-label>
+        <mat-select name="type" [ngModel]="type()" (ngModelChange)="onType($event)">
+          @for (t of types; track t) {
+            <mat-option [value]="t">{{ 'reports.types.' + t | translate }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <div class="f-date">
+        <mat-form-field>
+          <mat-label>{{ 'reports.fields.start' | translate }}</mat-label>
+          <input matInput type="date" name="start" [ngModel]="start()" (ngModelChange)="start.set($event); periodError.set(false)" />
+        </mat-form-field>
+      </div>
+      <div class="f-date">
+        <mat-form-field>
+          <mat-label>{{ 'reports.fields.end' | translate }}</mat-label>
+          <input matInput type="date" name="end" [ngModel]="end()" (ngModelChange)="end.set($event); periodError.set(false)" />
+        </mat-form-field>
+        <tp-field-error [message]="periodError() ? ('reports.errors.INVALID_PERIOD' | translate) : null" />
+      </div>
+      <button mat-flat-button type="submit" [disabled]="busy()">
+        @if (busy()) {
+          <mat-spinner diameter="18" />
+        } @else {
+          <mat-icon>play_arrow</mat-icon>
+        }
+        {{ 'reports.generate.submit' | translate }}
+      </button>
+    </form>
+  </article>
+
+  @if (loading()) {
+    <tp-skeleton variant="table" [count]="4" />
+  } @else if (failed()) {
+    <div class="tp-card">
+      <tp-empty-state icon="cloud_off" tone="error" [title]="'common.loadErrorTitle' | translate" [message]="'common.loadError' | translate">
+        <button mat-flat-button type="button" (click)="reload()"><mat-icon>refresh</mat-icon>{{ 'common.retry' | translate }}</button>
+      </tp-empty-state>
+    </div>
+  } @else {
+    <article class="tp-card table-card">
+      <header class="table-head">
+        <h3>{{ 'reports.listTitle' | translate }}</h3>
+        <p class="tp-muted">{{ 'reports.listSubtitle' | translate }}</p>
+      </header>
+      @if (reports().length === 0) {
+        <tp-empty-state icon="bar_chart" [title]="'reports.emptyTitle' | translate" [message]="'reports.emptyMessage' | translate" />
+      } @else {
+        <div class="tp-table-wrap">
+          <table class="tp-table">
+            <thead>
+              <tr>
+                <th>{{ 'reports.fields.type' | translate }}</th>
+                <th>{{ 'reports.columns.period' | translate }}</th>
+                <th>{{ 'reports.columns.status' | translate }}</th>
+                <th>{{ 'reports.columns.records' | translate }}</th>
+                <th>{{ 'reports.kpis.attendance' | translate }}</th>
+                <th>{{ 'reports.columns.generatedAt' | translate }}</th>
+                <th class="end">{{ 'reports.columns.actions' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (r of reports(); track r.id) {
+                <tr>
+                  <td><strong>{{ 'reports.types.' + r.reportType | translate }}</strong></td>
+                  <td class="nowrap">
+                    {{ date(r.periodStart) | date: 'd MMM y' : 'UTC' : lang.locale() }} – {{ date(r.periodEnd) | date: 'd MMM y' : 'UTC' : lang.locale() }}
+                  </td>
+                  <td><tp-status-badge kind="report" [status]="r.status" /></td>
+                  <td>{{ r.isGenerated() ? r.totalRecords : '—' }}</td>
+                  <td>
+                    @if (r.hasData() && r.summary) {
+                      {{ r.summary.attendanceRate }} %
+                    } @else if (r.isGenerated()) {
+                      <span class="tp-muted">{{ 'reports.noData' | translate }}</span>
+                    } @else {
+                      —
+                    }
+                  </td>
+                  <td class="nowrap">{{ r.generatedAt ? (date(r.generatedAt) | date: 'd MMM · HH:mm' : 'UTC' : lang.locale()) : '—' }}</td>
+                  <td class="end">
+                    <div class="row-actions">
+                      @if (r.isGenerated()) {
+                        <a class="link" [routerLink]="['/admin/reports', r.id]">{{ 'reports.view' | translate }}</a>
+                        <button mat-icon-button type="button" [disabled]="exportingId() === r.id" (click)="export(r)"
+                          [matTooltip]="'reports.exportCsv' | translate" [attr.aria-label]="'reports.exportCsv' | translate">
+                          <mat-icon>download</mat-icon>
+                        </button>
+                      } @else if (r.isGenerating()) {
+                        <mat-spinner diameter="18" />
+                      }
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </article>
+  }
+</section>

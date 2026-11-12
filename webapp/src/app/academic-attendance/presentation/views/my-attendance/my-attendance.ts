@@ -108,7 +108,7 @@ interface Row {
     .stack strong { color: var(--tp-cyan-text); }
     .stack small { color: var(--tp-muted); font-size: 12px; }
     .nowrap { white-space: nowrap; }
-    .cap { text-transform: capitalize; }
+    .cap::first-letter { text-transform: uppercase; }
     .mono { font-variant-numeric: tabular-nums; font-weight: 500; }
   `,
 })

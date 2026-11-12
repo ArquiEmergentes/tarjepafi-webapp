@@ -1,0 +1,94 @@
+<section class="tp-page">
+  <a class="back" routerLink="/admin/reports"><mat-icon>arrow_back</mat-icon>{{ 'nav.reports' | translate }}</a>
+
+  @if (loading()) {
+    <tp-skeleton variant="block" [count]="2" />
+    <tp-skeleton variant="cards" [count]="5" />
+    <tp-skeleton variant="table" [count]="5" />
+  } @else if (failed()) {
+    <div class="tp-card">
+      <tp-empty-state icon="cloud_off" tone="error" [title]="'common.loadErrorTitle' | translate" [message]="'common.loadError' | translate">
+        <button mat-flat-button type="button" (click)="load()"><mat-icon>refresh</mat-icon>{{ 'common.retry' | translate }}</button>
+      </tp-empty-state>
+    </div>
+  } @else if (detail(); as d) {
+    <tp-page-header
+      [title]="('reports.reportOf' | translate) + ' ' + ('reports.types.' + d.report.reportType | translate | lowercase)"
+      [subtitle]="((date(d.report.periodStart) | date: 'longDate' : 'UTC' : lang.locale()) ?? '') + ' – ' + ((date(d.report.periodEnd) | date: 'longDate' : 'UTC' : lang.locale()) ?? '')"
+    >
+      <tp-status-badge kind="report" [status]="d.report.status" />
+      @if (d.report.isGenerated()) {
+        <button mat-flat-button type="button" (click)="export()"><mat-icon>download</mat-icon>{{ 'reports.exportCsv' | translate }}</button>
+      }
+    </tp-page-header>
+
+    @if (!d.report.isGenerated()) {
+      <div class="tp-card">
+        <tp-empty-state
+          [icon]="d.report.isGenerating() ? 'hourglass_top' : 'error'"
+          [tone]="d.report.isGenerating() ? 'neutral' : 'error'"
+          [title]="('reports.states.' + d.report.status + '.title') | translate"
+          [message]="('reports.states.' + d.report.status + '.message') | translate"
+        >
+          <button mat-stroked-button type="button" (click)="load()"><mat-icon>refresh</mat-icon>{{ 'dashboard.refresh' | translate }}</button>
+        </tp-empty-state>
+      </div>
+    } @else if (!d.report.hasData()) {
+      <div class="tp-card">
+        <tp-empty-state icon="inbox" [title]="'reports.noData' | translate" [message]="'reports.noDataMessage' | translate" />
+      </div>
+    } @else if (d.report.summary; as s) {
+      <div class="kpis">
+        <tp-kpi-card [label]="'reports.kpis.attendance' | translate" [value]="s.attendanceRate" suffix="%" icon="how_to_reg" tone="success" />
+        <tp-kpi-card [label]="'reports.kpis.granted' | translate" [value]="s.accessGranted" icon="check_circle" tone="brand" />
+        <tp-kpi-card [label]="'reports.kpis.denied' | translate" [value]="s.accessDenied" icon="block" tone="error" />
+        <tp-kpi-card [label]="'reports.kpis.peakHour' | translate" [value]="s.peakHour ?? '—'" icon="schedule" tone="brand" />
+        <tp-kpi-card [label]="'reports.kpis.incidents' | translate" [value]="s.readersWithIncidents" icon="sensors_off" tone="warning" />
+      </div>
+
+      <article class="tp-card">
+        <header class="card-head">
+          <h3>{{ 'reports.daily.title' | translate }}</h3>
+          <p class="tp-muted">
+            {{ 'reports.daily.subtitle' | translate: { total: d.report.totalRecords } }} ·
+            {{ 'reports.columns.generatedAt' | translate }} {{ date(d.report.generatedAt) | date: 'd MMM y · HH:mm' : 'UTC' : lang.locale() }}
+          </p>
+        </header>
+        <tp-column-chart [points]="dayColumns()" [ariaLabel]="'reports.daily.title' | translate" />
+      </article>
+
+      <article class="tp-card table-card">
+        <div class="tp-table-wrap">
+          <table class="tp-table">
+            <thead>
+              <tr>
+                <th>{{ 'reports.daily.date' | translate }}</th>
+                <th>{{ 'reports.daily.readings' | translate }}</th>
+                <th>{{ 'reports.kpis.attendance' | translate }}</th>
+                <th>{{ 'reports.kpis.granted' | translate }}</th>
+                <th>{{ 'reports.kpis.denied' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (day of d.days; track day.date) {
+                <tr>
+                  <td class="cap">{{ date(day.date + 'T00:00:00') | date: 'EEE d MMM' : 'UTC' : lang.locale() }}</td>
+                  <td>{{ day.readings }}</td>
+                  <td>{{ day.attendanceRate === null ? '—' : day.attendanceRate + ' %' }}</td>
+                  <td>{{ day.accessGranted }}</td>
+                  <td>{{ day.accessDenied }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </article>
+    }
+  } @else {
+    <div class="tp-card">
+      <tp-empty-state icon="bar_chart" [title]="'reports.notFoundTitle' | translate" [message]="'reports.notFoundMessage' | translate">
+        <a mat-stroked-button routerLink="/admin/reports">{{ 'reports.backToList' | translate }}</a>
+      </tp-empty-state>
+    </div>
+  }
+</section>
