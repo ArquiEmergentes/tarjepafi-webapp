@@ -297,7 +297,8 @@ sessions.push(
   { id: 'mtg-02', type: 'MEETING', scheduleId: null, title: 'Capacitación: uso de lectores NFC en aula', spaceId: 'sp-sdoc', date: '2026-10-08', scheduledStart: '2026-10-08T16:00:00', scheduledEnd: '2026-10-08T17:30:00', toleranceMinutes: 10, status: 'SCHEDULED' },
 );
 for (const t of teachers.slice(0, 3)) sessionParticipants.push({ id: nextId('spt'), sessionId: 'mtg-01', cardHolderId: t.id });
-for (const t of teachers) sessionParticipants.push({ id: nextId('spt'), sessionId: 'mtg-02', cardHolderId: t.id });
+// Ana Quispe (D0004) no está convocada a la capacitación: permite probar "No estás convocado a esta reunión".
+for (const t of teachers.slice(0, 3)) sessionParticipants.push({ id: nextId('spt'), sessionId: 'mtg-02', cardHolderId: t.id });
 
 // Entradas al campus (una por titular y día con clases antes de la hora simulada)
 const firstClassByHolderDay = {};
