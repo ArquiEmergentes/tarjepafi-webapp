@@ -1,0 +1,117 @@
+{
+  "common": {
+    "retry": "Retry",
+    "close": "Close",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save": "Save",
+    "search": "Search",
+    "all": "All",
+    "reasonRequired": "Enter a reason to continue.",
+    "loadError": "We couldn't load the information. Check that the API is running and try again.",
+    "saveError": "We couldn't save your changes. Please try again."
+  },
+  "nav": {
+    "main": "Main navigation",
+    "profile": "My profile",
+    "dashboard": "Dashboard",
+    "credentials": "Credentials",
+    "enrollmentCheck": "Verify enrollments",
+    "readers": "IoT readers",
+    "simulator": "NFC simulator",
+    "accessRecords": "Access records",
+    "reports": "Reports",
+    "mySessions": "My sessions",
+    "myAttendance": "My teaching attendance",
+    "myMeetings": "My meetings",
+    "comingSoon": "My portal",
+    "collapse": "Collapse menu",
+    "sections": {
+      "overview": "Overview",
+      "credentials": "Credentials",
+      "iot": "IoT infrastructure",
+      "data": "Data",
+      "teaching": "Teaching",
+      "account": "Account",
+      "portal": "Portal"
+    }
+  },
+  "header": {
+    "campus": "San Miguel Campus",
+    "simulatedTime": "Simulated time",
+    "clockHint": "Change it from the NFC simulator",
+    "language": "Language",
+    "notifications": "Notifications",
+    "noNotifications": "You have no new notifications."
+  },
+  "roles": {
+    "ADMIN": "Administrator",
+    "TEACHER": "Teacher",
+    "STUDENT": "Student",
+    "STAFF": "Staff member"
+  },
+  "auth": {
+    "title": "Sign in",
+    "subtitle": "Use your institutional account to manage the San Miguel Campus.",
+    "email": "Institutional email",
+    "password": "Password",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "remember": "Remember me",
+    "submit": "Sign in",
+    "signOut": "Sign out",
+    "errors": {
+      "EMAIL_REQUIRED": "Enter your institutional email.",
+      "PASSWORD_REQUIRED": "Enter your password.",
+      "INVALID_EMAIL": "Enter a valid institutional email.",
+      "INVALID_CREDENTIALS": "Incorrect email or password.",
+      "ACCOUNT_DISABLED": "Your account is not enabled. Contact the administrator.",
+      "NETWORK": "We couldn't reach the server. Check that the API is running and try again."
+    }
+  },
+  "profile": {
+    "title": "My profile",
+    "subtitle": "Your TarjePAFI account details.",
+    "account": "Account",
+    "role": "Role",
+    "status": "Account status",
+    "email": "Email",
+    "createdAt": "Account created",
+    "campus": "Campus"
+  },
+  "comingSoon": {
+    "title": "Your portal will be available soon",
+    "message": "Hi, {{name}}. We're preparing your TarjePAFI portal. In the meantime, your credential keeps working on campus readers."
+  },
+  "accessDenied": {
+    "title": "Access denied",
+    "message": "Your role doesn't have permission to view this section. If you think this is a mistake, contact the administrator.",
+    "goHome": "Go to home"
+  },
+  "pendingPhase": {
+    "title": "Screen under construction",
+    "message": "This view is built in phase {{phase}} of Sprint 1."
+  },
+  "status": {
+    "credential": { "ACTIVE": "Active", "BLOCKED": "Blocked", "LOST": "Lost", "DEACTIVATED": "Deactivated" },
+    "reader": {
+      "REGISTERED": "Registered",
+      "ACTIVE": "Active",
+      "INACTIVE": "Inactive",
+      "OFFLINE": "Offline",
+      "DEGRADED": "Degraded",
+      "MAINTENANCE": "Maintenance"
+    },
+    "session": { "SCHEDULED": "Scheduled", "IN_PROGRESS": "In progress", "FINISHED": "Finished" },
+    "attendance": { "PENDING": "Pending", "PRESENT": "Present", "LATE": "Late", "ABSENT": "Absent" },
+    "decision": { "GRANTED": "Granted", "DENIED": "Denied" },
+    "user": { "ACTIVE": "Active", "INACTIVE": "Inactive", "SUSPENDED": "Suspended" },
+    "report": { "GENERATING": "Generating", "GENERATED": "Generated", "ERROR": "Error" },
+    "enrollment": { "COMPLETED": "Completed", "PENDING": "Pending" },
+    "shift": { "OPEN": "Open", "CLOSED": "Closed" },
+    "incident": { "OPEN": "Open", "RESOLVED": "Resolved" },
+    "outcome": { "ATTENDANCE": "Attendance", "ACCESS": "Access", "WORK_SHIFT": "Work shift", "REJECTED": "Rejected" },
+    "role": { "ADMIN": "Administrator", "TEACHER": "Teacher", "STUDENT": "Student", "STAFF": "Staff member" },
+    "space": { "AVAILABLE": "Available", "MAINTENANCE": "Maintenance" }
+  }
+}
