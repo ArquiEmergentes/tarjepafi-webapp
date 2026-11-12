@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "api": "json-server --watch server/db.json --routes server/routes.json --port 3000",
+    "api": "json-server server/db.json --routes server/routes.json --port 3000",
     "api:seed": "node server/seed/generate-db.mjs",
     "dev": "concurrently -k -n api,web -c cyan,blue \"npm:api\" \"npm:start\"",
     "build": "ng build",

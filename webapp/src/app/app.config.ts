@@ -10,7 +10,9 @@ import localeEsPE from '@angular/common/locales/es-PE';
 
 import { routes } from './app.routes';
 import { AuthStore } from './iam/application/auth.store';
+import { CredentialsNotifications } from './credentials/application/credentials-notifications';
 import { LanguageService } from './shared/application/language.service';
+import { NOTIFICATION_SOURCES } from './shared/application/notification.port';
 import { SESSION_PORT } from './shared/application/session.port';
 
 registerLocaleData(localeEsPE, 'es-PE');
@@ -26,6 +28,7 @@ export const appConfig: ApplicationConfig = {
       lang: 'es',
     }),
     { provide: SESSION_PORT, useExisting: AuthStore },
+    { provide: NOTIFICATION_SOURCES, useExisting: CredentialsNotifications, multi: true },
     {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
       useValue: { appearance: 'outline', floatLabel: 'always', subscriptSizing: 'dynamic' },

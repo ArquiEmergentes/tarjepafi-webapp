@@ -7,7 +7,14 @@
     "save": "Save",
     "search": "Search",
     "all": "All",
+    "clear": "Clear",
+    "clearFilters": "Clear filters",
+    "showing": "Showing {{from}}–{{to}} of {{total}}",
+    "pagination": "Pagination",
+    "previous": "Previous page",
+    "next": "Next page",
     "reasonRequired": "Enter a reason to continue.",
+    "loadErrorTitle": "We couldn't load this section",
     "loadError": "We couldn't load the information. Check that the API is running and try again.",
     "saveError": "We couldn't save your changes. Please try again."
   },
@@ -91,6 +98,186 @@
   "pendingPhase": {
     "title": "Screen under construction",
     "message": "This view is built in phase {{phase}} of Sprint 1."
+  },
+  "credentials": {
+    "title": "Credentials",
+    "subtitle": "NFC cards issued to students, teachers and staff at the campus.",
+    "tableTitle": "Issued credentials",
+    "tableSubtitle": "{{total}} NFC cards registered at the campus",
+    "emptyTitle": "No credentials match",
+    "emptyMessage": "Try another name, code or UID, or change the filters.",
+    "unlinked": "Unlinked card",
+    "unlinkedHint": "No holder assigned",
+    "neverUsed": "No recorded use",
+    "viewDetail": "View details",
+    "moreActions": "More actions",
+    "kpis": {
+      "ACTIVE": "Active",
+      "ACTIVE_caption": "{{percent}}% of all issued cards",
+      "BLOCKED": "Blocked",
+      "BLOCKED_caption": "Manual or security block",
+      "LOST": "Lost",
+      "LOST_caption": "Reported by the holder",
+      "DEACTIVATED": "Deactivated",
+      "DEACTIVATED_caption": "Withdrawals, terminations and incomplete enrollment"
+    },
+    "filters": {
+      "role": "User type",
+      "status": "Status",
+      "searchPlaceholder": "Name, code, email or UID",
+      "roles": { "ALL": "All", "STUDENT": "Students", "TEACHER": "Teachers", "STAFF": "Staff", "UNLINKED": "No holder" }
+    },
+    "columns": {
+      "holder": "User",
+      "code": "Code",
+      "role": "User type",
+      "uid": "Card UID",
+      "status": "Status",
+      "lastUsed": "Last used",
+      "actions": "Action"
+    },
+    "actions": {
+      "BLOCK": {
+        "short": "Block",
+        "title": "Block card",
+        "message": "Card {{uid}} belonging to {{holder}} will stop working on every reader until it is reactivated.",
+        "confirm": "Block card",
+        "done": "Card {{uid}} blocked."
+      },
+      "REPORT_LOST": {
+        "short": "Report lost",
+        "title": "Report lost card",
+        "message": "Card {{uid}} belonging to {{holder}} will be marked as lost and will stop working on the readers.",
+        "confirm": "Report lost",
+        "done": "Card {{uid}} reported as lost."
+      },
+      "DEACTIVATE": {
+        "short": "Deactivate",
+        "title": "Deactivate card",
+        "message": "Card {{uid}} belonging to {{holder}} will be deactivated and its access to campus services will be cancelled.",
+        "confirm": "Deactivate",
+        "done": "Card {{uid}} deactivated."
+      },
+      "REACTIVATE": {
+        "short": "Reactivate",
+        "title": "Reactivate card",
+        "message": "Card {{uid}} belonging to {{holder}} will work again on campus readers.",
+        "studentHint": "It can only be reactivated if the student's enrollment is complete.",
+        "confirm": "Reactivate card",
+        "done": "Card {{uid}} reactivated."
+      }
+    },
+    "fields": {
+      "reason": "Reason",
+      "noteRequired": "Reason (required)",
+      "noteOptional": "Details (optional)"
+    },
+    "reasons": {
+      "WITHDRAWAL": "Withdrawal from the university",
+      "REENROLLMENT": "Re-enrollment",
+      "ENROLLMENT_NOT_COMPLETED": "Enrollment not completed",
+      "LOST": "Lost",
+      "MANUAL": "Manual management"
+    },
+    "errors": {
+      "NOT_ALLOWED": "This action isn't available for the card's current status.",
+      "NOTE_REQUIRED": "Enter a reason to continue.",
+      "HOLDER_NOT_FOUND": "Holder not found",
+      "HOLDER_HAS_ACTIVE_CARD": "The holder already has an active card ({{uid}}). Deactivate it before continuing.",
+      "ENROLLMENT_NOT_COMPLETED": "It can't be reactivated: the student's enrollment is pending.",
+      "ALREADY_LINKED": "The card is already linked to this holder.",
+      "SAVE_FAILED": "We couldn't save your changes. Check that the API is running and try again."
+    },
+    "link": {
+      "title": "Link holder",
+      "updateTitle": "Update holder",
+      "message": "Search the holder by institutional code to link them to card {{uid}}.",
+      "current": "Current holder",
+      "code": "Holder code",
+      "confirm": "Link",
+      "short": "Link holder",
+      "updateShort": "Update holder",
+      "done": "Card {{uid}} linked to {{holder}}."
+    },
+    "detail": {
+      "holder": "Holder",
+      "fullName": "Full name",
+      "email": "Email",
+      "program": "Program",
+      "area": "Area",
+      "enrollment": "Enrollment",
+      "noHolderTitle": "This card has no holder",
+      "noHolderMessage": "Link it to a student, teacher or staff member so it can be used on the readers.",
+      "card": "NFC card",
+      "issuedAt": "Issued",
+      "statusChangedAt": "Last status change",
+      "historyTab": "Status history",
+      "permissionsTab": "Permissions",
+      "notFoundTitle": "We couldn't find this credential",
+      "notFoundMessage": "The link may be wrong or the card may no longer exist.",
+      "backToList": "Back to credentials"
+    },
+    "history": {
+      "date": "Date",
+      "change": "Change",
+      "detail": "Details",
+      "actor": "Done by",
+      "system": "System (automatic)",
+      "holderUpdated": "Holder updated",
+      "emptyTitle": "No recorded changes",
+      "emptyMessage": "This card keeps the status it was issued with."
+    },
+    "permissions": {
+      "rule": "This card's exceptions are applied first; if a space has no exception, the space's allowed roles are used.",
+      "space": "Space",
+      "effect": "Exception",
+      "effects": { "ALLOW": "Allow", "DENY": "Deny" },
+      "add": "Save exception",
+      "unlinkedNote": "The card has no holder: without an exception, no space grants access by role.",
+      "allowedRoles": "Allowed roles",
+      "exception": "Card exception",
+      "effective": "Effective access",
+      "basis": { "EXCEPTION": "by exception", "ROLE": "by role" },
+      "remove": "Remove exception",
+      "removeTitle": "Remove exception",
+      "removeMessage": "Access to {{space}} will depend on the space's allowed roles again.",
+      "saved": "Exception saved.",
+      "removed": "Exception removed."
+    },
+    "notifications": {
+      "enrollmentTitle": "{{count}} cards to deactivate",
+      "enrollmentDetail": "Students with pending enrollment after the deadline.",
+      "blockedTitle": "{{count}} blocked cards",
+      "blockedDetail": "Check whether any should be reactivated or deactivated."
+    }
+  },
+  "enrollmentCheck": {
+    "title": "Verify enrollments",
+    "subtitle": "Automatically deactivates the cards of students who didn't complete their enrollment on time.",
+    "run": "Run verification",
+    "term": "Term",
+    "deadline": "Enrollment deadline",
+    "now": "Current date (simulated)",
+    "deadlineState": "Deadline",
+    "deadlinePassed": "Deadline passed",
+    "deadlineOpen": "Within the deadline",
+    "rule": "If the current date is past the deadline, active cards of students with pending enrollment become Deactivated (reason: enrollment not completed, by: System). The others don't change.",
+    "resultTitle": "Verification result",
+    "executedAt": "Run on",
+    "summary": "{{deactivated}} deactivated, {{unchanged}} unchanged",
+    "notYet": "The enrollment deadline hasn't passed yet, so no card was deactivated.",
+    "deactivated": "Deactivated",
+    "unchanged": "Unchanged",
+    "candidatesTitle": "Cards that will be deactivated",
+    "candidatesSubtitle": "Active cards of students with pending enrollment. Another {{unchanged}} active student cards won't change.",
+    "noCandidatesTitle": "No cards to deactivate",
+    "noCandidatesMessage": "Every student with an active card completed their enrollment.",
+    "inTimeTitle": "The enrollment period is still open",
+    "inTimeMessage": "Once the current date is past the deadline, you'll see here the cards that will be deactivated.",
+    "confirmTitle": "Run enrollment verification",
+    "confirmMessage": "{{count}} cards of students with pending enrollment will be deactivated. This action is recorded in the history.",
+    "confirmMessageInTime": "The enrollment deadline hasn't passed yet, so no card will be deactivated. Do you want to run the verification anyway?",
+    "partialError": "{{count}} cards couldn't be deactivated. Run the verification again."
   },
   "status": {
     "credential": { "ACTIVE": "Active", "BLOCKED": "Blocked", "LOST": "Lost", "DEACTIVATED": "Deactivated" },
