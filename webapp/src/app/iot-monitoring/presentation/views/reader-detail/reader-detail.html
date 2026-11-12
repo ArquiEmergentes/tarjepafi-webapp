@@ -1,0 +1,251 @@
+<section class="tp-page">
+  <a class="back" routerLink="/admin/readers"><mat-icon>arrow_back</mat-icon>{{ 'nav.readers' | translate }}</a>
+
+  @if (loading()) {
+    <tp-skeleton variant="block" [count]="3" />
+    <tp-skeleton variant="cards" [count]="3" />
+  } @else if (failed()) {
+    <div class="tp-card">
+      <tp-empty-state icon="cloud_off" tone="error" [title]="'common.loadErrorTitle' | translate" [message]="'common.loadError' | translate">
+        <button mat-flat-button type="button" (click)="reload()"><mat-icon>refresh</mat-icon>{{ 'common.retry' | translate }}</button>
+      </tp-empty-state>
+    </div>
+  } @else if (reader(); as r) {
+    <tp-page-header [title]="r.id" [subtitle]="r.name + (space() ? ' · ' + space()!.name + ', ' + space()!.building : '')">
+      @if (r.isMonitored()) {
+        <button mat-stroked-button type="button" [disabled]="busy()" (click)="healthCheck()">
+          @if (busy()) {
+            <mat-spinner diameter="18" />
+          } @else {
+            <mat-icon>monitor_heart</mat-icon>
+          }
+          {{ 'readers.healthCheck.run' | translate }}
+        </button>
+      }
+      @for (a of r.availableActions(); track a) {
+        @if (a === 'START_MAINTENANCE') {
+          <button mat-stroked-button type="button" [disabled]="busy()" (click)="run(a)">
+            <mat-icon>{{ icon(a) }}</mat-icon>{{ 'readers.actions.' + a + '.short' | translate }}
+          </button>
+        } @else {
+          <button mat-flat-button type="button" [class.tp-btn-danger]="a === 'DEACTIVATE'" [disabled]="busy()" (click)="run(a)">
+            <mat-icon>{{ icon(a) }}</mat-icon>{{ 'readers.actions.' + a + '.short' | translate }}
+          </button>
+        }
+      }
+    </tp-page-header>
+    <div class="status-line">
+      <tp-status-badge kind="reader" [status]="r.status" />
+      <span class="tp-muted">{{ 'readers.types.' + r.deviceType | translate }} · {{ 'readers.modes.' + r.configuration.readerMode | translate }}</span>
+    </div>
+
+    @if (r.status === 'OFFLINE') {
+      <div class="alert alert--error" role="alert">
+        <mat-icon>error</mat-icon>
+        <div>
+          <strong>{{ 'readers.alerts.offlineTitle' | translate: { time: (date(r.lastSeenAt) | date: 'd MMM · HH:mm' : 'UTC' : lang.locale()) ?? '—' } }}</strong>
+          <p>{{ 'readers.alerts.offlineMessage' | translate }}</p>
+        </div>
+      </div>
+    } @else if (!r.canProcessTaps()) {
+      <div class="alert alert--info">
+        <mat-icon>info</mat-icon>
+        <div>
+          <strong>{{ 'readers.alerts.outOfServiceTitle' | translate }}</strong>
+          <p>{{ 'readers.alerts.outOfServiceMessage' | translate }}</p>
+        </div>
+      </div>
+    } @else if (r.status === 'DEGRADED') {
+      <div class="alert alert--warning">
+        <mat-icon>warning</mat-icon>
+        <div>
+          <strong>{{ 'readers.alerts.degradedTitle' | translate }}</strong>
+          <p>{{ 'readers.alerts.degradedMessage' | translate }}</p>
+        </div>
+      </div>
+    }
+
+    <article class="tp-card tabs-card">
+      <mat-tab-group animationDuration="150ms" mat-stretch-tabs="false" mat-align-tabs="start">
+        <!-- Resumen -->
+        <mat-tab [label]="'readers.detail.summary' | translate">
+          <div class="tab">
+            <dl class="facts">
+              <div><dt>{{ 'readers.fields.id' | translate }}</dt><dd>{{ r.id }}</dd></div>
+              <div><dt>{{ 'readers.fields.location' | translate }}</dt><dd>{{ space()?.name ?? r.spaceId }}<small>{{ space()?.building }}{{ space() ? ' · ' + ('readers.floor' | translate: { n: space()!.floor }) : '' }}</small></dd></div>
+              <div><dt>{{ 'readers.fields.type' | translate }}</dt><dd>{{ 'readers.types.' + r.deviceType | translate }}<small>{{ 'readers.modes.' + r.configuration.readerMode | translate }}</small></dd></div>
+              <div><dt>{{ 'readers.columns.firmware' | translate }}</dt><dd>{{ r.configuration.firmwareVersion }}</dd></div>
+              <div>
+                <dt>{{ 'readers.columns.lastSeen' | translate }}</dt>
+                <dd>
+                  @if (date(r.lastSeenAt); as d) {
+                    {{ d | date: 'd MMM · HH:mm:ss' : 'UTC' : lang.locale() }}
+                    @if (elapsed(r.lastSeenAt); as e) {
+                      <small [class.bad]="r.status === 'OFFLINE'">{{ 'common.ago.' + e.unit | translate: { n: e.value } }}</small>
+                    }
+                  } @else {
+                    <span class="tp-muted">{{ 'readers.neverSeen' | translate }}</span>
+                  }
+                </dd>
+              </div>
+              <div>
+                <dt>{{ 'readers.fields.signal' | translate }}</dt>
+                <dd>
+                  @if (latest(); as t) {
+                    <span [class.warn]="t.hasWeakSignal()">{{ t.signalStrength }} dBm</span>
+                    <small [class.warn]="t.hasWeakSignal()">{{ (t.hasWeakSignal() ? 'readers.signal.weak' : 'readers.signal.good') | translate }}</small>
+                  } @else {
+                    <span class="tp-muted">—</span>
+                  }
+                </dd>
+              </div>
+              <div><dt>{{ 'readers.columns.status' | translate }}</dt><dd><tp-status-badge kind="reader" [status]="r.status" /></dd></div>
+              <div><dt>{{ 'readers.fields.registeredAt' | translate }}</dt><dd>{{ date(r.registeredAt) | date: 'd MMM y · HH:mm' : 'UTC' : lang.locale() }}</dd></div>
+            </dl>
+
+            <h3 class="section">{{ 'readers.detail.openIncidents' | translate }}</h3>
+            @if (openIncidents().length === 0) {
+              <p class="tp-muted none">{{ 'readers.incidents.noneOpen' | translate }}</p>
+            } @else {
+              <ul class="incident-list">
+                @for (i of openIncidents(); track i.id) {
+                  <li>
+                    <div>
+                      <strong>{{ 'readers.incidentTypes.' + i.type | translate }}</strong>
+                      <small>{{ date(i.detectedAt) | date: 'd MMM · HH:mm' : 'UTC' : lang.locale() }} · {{ i.description }}</small>
+                    </div>
+                    <tp-status-badge kind="incident" status="OPEN" />
+                  </li>
+                }
+              </ul>
+            }
+          </div>
+        </mat-tab>
+
+        <!-- Configuración -->
+        <mat-tab [label]="'readers.detail.configuration' | translate">
+          <div class="tab">
+            <p class="hint"><mat-icon>info</mat-icon>{{ 'readers.config.rules' | translate }}</p>
+            <tp-reader-configuration-fields [(value)]="draft" [errors]="configMessages()" [disabled]="busy()" />
+            <p class="tolerance">
+              {{ 'readers.config.offlineAfter' | translate: { n: missedHeartbeats, seconds: (draft().heartbeatInterval ?? 0) * missedHeartbeats } }}
+            </p>
+            <div class="form-actions">
+              <button mat-stroked-button type="button" [disabled]="!configDirty() || busy()" (click)="resetConfiguration()">{{ 'readers.config.reset' | translate }}</button>
+              <button mat-flat-button type="button" [disabled]="!configDirty() || busy()" (click)="saveConfiguration()">
+                <mat-icon>save</mat-icon>{{ 'readers.config.save' | translate }}
+              </button>
+            </div>
+          </div>
+        </mat-tab>
+
+        <!-- Telemetría -->
+        <mat-tab [label]="'readers.detail.telemetry' | translate">
+          <div class="tab">
+            @if (telemetryLoading()) {
+              <tp-skeleton variant="block" [count]="5" />
+            } @else if (telemetryFailed()) {
+              <tp-empty-state icon="cloud_off" tone="error" [title]="'common.loadErrorTitle' | translate" [message]="'common.loadError' | translate">
+                <button mat-flat-button type="button" (click)="loadTelemetry(r.id)"><mat-icon>refresh</mat-icon>{{ 'common.retry' | translate }}</button>
+              </tp-empty-state>
+            } @else if (telemetry().length === 0) {
+              <tp-empty-state icon="monitoring" [title]="'readers.telemetry.emptyTitle' | translate" [message]="'readers.telemetry.emptyMessage' | translate" />
+            } @else {
+              <div class="chart-head">
+                <div>
+                  <h3>{{ 'readers.telemetry.title' | translate }}</h3>
+                  <p class="tp-muted">{{ 'readers.telemetry.subtitle' | translate: { count: chartPoints().length } }}</p>
+                </div>
+                @if (latest()?.hasWeakSignal()) {
+                  <span class="warn-chip"><mat-icon>warning</mat-icon>{{ 'readers.signal.weak' | translate }}</span>
+                }
+              </div>
+              <tp-line-chart
+                [points]="chartPoints()"
+                unit="dBm"
+                [min]="-100"
+                [max]="-40"
+                [threshold]="weakSignal"
+                [thresholdLabel]="'readers.telemetry.threshold' | translate: { value: weakSignal }"
+                [ariaLabel]="'readers.telemetry.title' | translate"
+              />
+              <div class="tp-table-wrap">
+                <table class="tp-table">
+                  <thead>
+                    <tr>
+                      <th>{{ 'readers.telemetry.capturedAt' | translate }}</th>
+                      <th>{{ 'readers.fields.signal' | translate }}</th>
+                      <th>{{ 'readers.telemetry.uptime' | translate }}</th>
+                      <th>{{ 'readers.columns.firmware' | translate }}</th>
+                      <th>{{ 'readers.columns.status' | translate }}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (t of newestFirst(); track t.id) {
+                      <tr>
+                        <td>{{ date(t.capturedAt) | date: 'd MMM · HH:mm:ss' : 'UTC' : lang.locale() }}</td>
+                        <td [class.warn]="t.hasWeakSignal()">{{ t.signalStrength }} dBm</td>
+                        <td>{{ uptime(t.uptime) }}</td>
+                        <td>{{ t.firmwareVersion }}</td>
+                        <td><tp-status-badge kind="reader" [status]="t.status" /></td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            }
+          </div>
+        </mat-tab>
+
+        <!-- Incidencias -->
+        <mat-tab [label]="('readers.detail.incidents' | translate) + (openIncidents().length ? ' (' + openIncidents().length + ')' : '')">
+          <div class="tab">
+            @if (incidents().length === 0) {
+              <tp-empty-state icon="verified" [title]="'readers.incidents.emptyTitle' | translate" [message]="'readers.incidents.emptyMessage' | translate" />
+            } @else {
+              <div class="tp-table-wrap">
+                <table class="tp-table">
+                  <thead>
+                    <tr>
+                      <th>{{ 'readers.incidents.type' | translate }}</th>
+                      <th>{{ 'readers.incidents.detectedAt' | translate }}</th>
+                      <th>{{ 'readers.incidents.description' | translate }}</th>
+                      <th>{{ 'readers.columns.status' | translate }}</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (i of incidents(); track i.id) {
+                      <tr>
+                        <td><strong>{{ 'readers.incidentTypes.' + i.type | translate }}</strong></td>
+                        <td class="nowrap">{{ date(i.detectedAt) | date: 'd MMM y · HH:mm' : 'UTC' : lang.locale() }}</td>
+                        <td class="desc">
+                          {{ i.description }}
+                          @if (i.resolvedAt) {
+                            <small>{{ 'readers.incidents.resolvedAt' | translate }} {{ date(i.resolvedAt) | date: 'd MMM · HH:mm' : 'UTC' : lang.locale() }}</small>
+                          }
+                        </td>
+                        <td><tp-status-badge kind="incident" [status]="i.isOpen() ? 'OPEN' : 'RESOLVED'" /></td>
+                        <td class="end">
+                          @if (i.isOpen()) {
+                            <button mat-stroked-button type="button" [disabled]="busy()" (click)="resolve(i)">{{ 'readers.incidents.resolve' | translate }}</button>
+                          }
+                        </td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            }
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </article>
+  } @else {
+    <div class="tp-card">
+      <tp-empty-state icon="sensors_off" [title]="'readers.detail.notFoundTitle' | translate" [message]="'readers.detail.notFoundMessage' | translate">
+        <a mat-stroked-button routerLink="/admin/readers">{{ 'readers.detail.backToList' | translate }}</a>
+      </tp-empty-state>
+    </div>
+  }
+</section>

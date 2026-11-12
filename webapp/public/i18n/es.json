@@ -7,6 +7,14 @@
     "save": "Guardar",
     "search": "Buscar",
     "all": "Todos",
+    "allFem": "Todas",
+    "ago": {
+      "now": "Ahora",
+      "seconds": "Hace {{n}} s",
+      "minutes": "Hace {{n}} min",
+      "hours": "Hace {{n}} h",
+      "days": "Hace {{n}} d"
+    },
     "clear": "Limpiar",
     "clearFilters": "Limpiar filtros",
     "showing": "Mostrando {{from}}–{{to}} de {{total}}",
@@ -278,6 +286,178 @@
     "confirmMessage": "Se desactivarán {{count}} tarjetas de estudiantes con matrícula pendiente. Esta acción queda registrada en el historial.",
     "confirmMessageInTime": "El plazo de matrícula aún no vence, así que no se desactivará ninguna tarjeta. ¿Deseas ejecutar la verificación de todos modos?",
     "partialError": "{{count}} tarjetas no se pudieron desactivar. Ejecuta la verificación otra vez."
+  },
+  "readers": {
+    "title": "Lectores IoT",
+    "subtitle": "Lectores NFC registrados en la Sede San Miguel.",
+    "tableTitle": "Lectores",
+    "tableSubtitle": "La última conexión se calcula con la hora simulada.",
+    "emptyTitle": "No hay lectores que coincidan",
+    "emptyMessage": "Prueba con otro ID o cambia los filtros.",
+    "neverSeen": "Sin comunicación aún",
+    "openIncidents": "{{count}} incidencias abiertas",
+    "floor": "Piso {{n}}",
+    "kpis": {
+      "total": "Total de lectores",
+      "totalCaption": "Incluye {{count}} en estado Degradado",
+      "online": "En línea",
+      "onlineCaption": "Activos o degradados: procesan lecturas",
+      "offline": "Sin conexión",
+      "offlineCaption": "Sin heartbeat durante 3 intervalos",
+      "maintenance": "En mantenimiento",
+      "maintenanceCaption": "Fuera de servicio por revisión técnica"
+    },
+    "filters": {
+      "location": "Ubicación",
+      "type": "Tipo",
+      "status": "Estado",
+      "searchPlaceholder": "ID o nombre del lector"
+    },
+    "columns": {
+      "reader": "Lector",
+      "location": "Ubicación",
+      "type": "Tipo",
+      "lastSeen": "Última conexión",
+      "firmware": "Firmware",
+      "status": "Estado",
+      "actions": "Acciones"
+    },
+    "types": {
+      "CLASSROOM_READER": "Lector de aula",
+      "TURNSTILE": "Torniquete",
+      "DOOR_READER": "Lector de puerta",
+      "DESK_READER": "Lector de mostrador"
+    },
+    "modes": { "ATTENDANCE": "Asistencia", "ACCESS_CONTROL": "Control de acceso" },
+    "fields": {
+      "id": "ID del lector",
+      "name": "Nombre",
+      "type": "Tipo de dispositivo",
+      "location": "Ubicación",
+      "signal": "Intensidad de señal",
+      "registeredAt": "Registrado"
+    },
+    "register": {
+      "open": "Registrar lector",
+      "title": "Registrar lector",
+      "subtitle": "El lector se crea en estado Registrado; actívalo cuando esté instalado.",
+      "idHint": "Formato RDR-X-000, por ejemplo RDR-A-304",
+      "namePlaceholder": "Lector Aula A-304",
+      "submit": "Registrar",
+      "done": "Lector {{id}} registrado."
+    },
+    "actions": {
+      "ACTIVATE": {
+        "short": "Activar",
+        "title": "Activar lector",
+        "message": "{{id}} · {{name}} empezará a procesar lecturas de tarjetas.",
+        "confirm": "Activar",
+        "done": "Lector {{id}} activado."
+      },
+      "DEACTIVATE": {
+        "short": "Desactivar",
+        "title": "Desactivar lector",
+        "message": "{{id}} · {{name}} dejará de procesar lecturas. Quienes pasen su tarjeta verán \"Lector fuera de servicio\".",
+        "confirm": "Desactivar",
+        "done": "Lector {{id}} desactivado."
+      },
+      "START_MAINTENANCE": {
+        "short": "Poner en mantenimiento",
+        "title": "Poner en mantenimiento",
+        "message": "{{id}} · {{name}} quedará fuera de servicio hasta que finalices el mantenimiento.",
+        "confirm": "Iniciar mantenimiento",
+        "done": "Lector {{id}} en mantenimiento."
+      },
+      "END_MAINTENANCE": {
+        "short": "Finalizar mantenimiento",
+        "title": "Finalizar mantenimiento",
+        "message": "{{id}} · {{name}} volverá a estar activo y procesará lecturas.",
+        "confirm": "Finalizar mantenimiento",
+        "done": "Lector {{id}} activo nuevamente."
+      }
+    },
+    "errors": {
+      "MODE_REQUIRED": "Selecciona el modo de operación.",
+      "COMMUNICATION_INTERVAL_INVALID": "El intervalo de comunicación debe ser un número entero mayor que 0.",
+      "HEARTBEAT_INTERVAL_INVALID": "El intervalo de heartbeat debe ser un número entero mayor que 0.",
+      "HEARTBEAT_LOWER_THAN_COMMUNICATION": "El heartbeat debe ser mayor o igual que el intervalo de comunicación.",
+      "FIRMWARE_FORMAT": "Usa el formato x.y.z, por ejemplo 2.4.1.",
+      "ID_FORMAT": "Usa el formato RDR-X-000, por ejemplo RDR-A-304.",
+      "ID_TAKEN": "Ya existe un lector con ese ID",
+      "NAME_REQUIRED": "Ingresa el nombre del lector.",
+      "TYPE_REQUIRED": "Selecciona el tipo de dispositivo.",
+      "SPACE_REQUIRED": "Selecciona la ubicación del lector.",
+      "NOT_ALLOWED": "Esta acción no está disponible para el estado actual del lector.",
+      "SAVE_FAILED": "No pudimos guardar los cambios. Verifica que la API esté en ejecución e inténtalo de nuevo."
+    },
+    "healthCheck": {
+      "run": "Ejecutar health check",
+      "ok": "{{id}} respondió correctamente · señal {{signal}} dBm.",
+      "reconnected": "{{id}} volvió a conectarse · señal {{signal}} dBm. Se cerró la incidencia de desconexión."
+    },
+    "config": {
+      "readerMode": "Modo de operación",
+      "firmwareVersion": "Versión de firmware",
+      "communicationInterval": "Intervalo de comunicación",
+      "heartbeatInterval": "Intervalo de heartbeat",
+      "rules": "Los intervalos deben ser mayores que 0, el heartbeat mayor o igual que la comunicación y el firmware con formato x.y.z. Si la configuración no es válida, se conserva la anterior.",
+      "offlineAfter": "El lector se marcará Sin conexión si no envía heartbeat en {{n}} intervalos ({{seconds}} s).",
+      "reset": "Descartar cambios",
+      "save": "Guardar configuración",
+      "saved": "Configuración de {{id}} guardada.",
+      "invalid": "La configuración no es válida. Se conserva la anterior."
+    },
+    "alerts": {
+      "offlineTitle": "El lector no se comunica desde {{time}}.",
+      "offlineMessage": "Ejecuta un health check o verifica su alimentación y conexión de red. Mientras tanto no procesa lecturas.",
+      "outOfServiceTitle": "Este lector no procesa lecturas.",
+      "outOfServiceMessage": "Quien pase su tarjeta verá \"Lector fuera de servicio\". Actívalo o finaliza el mantenimiento para volver a usarlo.",
+      "degradedTitle": "El lector funciona con problemas.",
+      "degradedMessage": "Sigue procesando lecturas, pero revisa sus incidencias abiertas y su señal."
+    },
+    "detail": {
+      "summary": "Resumen",
+      "configuration": "Configuración",
+      "telemetry": "Telemetría",
+      "incidents": "Incidencias",
+      "openIncidents": "Incidencias abiertas",
+      "notFoundTitle": "No encontramos este lector",
+      "notFoundMessage": "Puede que el enlace sea incorrecto o que el lector ya no exista.",
+      "backToList": "Volver a lectores"
+    },
+    "signal": { "weak": "Señal débil", "good": "Señal estable" },
+    "telemetry": {
+      "title": "Telemetría reciente",
+      "subtitle": "Intensidad de señal (dBm) · últimas {{count}} muestras",
+      "threshold": "Umbral {{value}} dBm",
+      "capturedAt": "Capturada",
+      "uptime": "Tiempo encendido",
+      "emptyTitle": "Sin telemetría todavía",
+      "emptyMessage": "El lector aún no ha enviado datos. Actívalo y ejecuta un health check."
+    },
+    "incidents": {
+      "type": "Tipo",
+      "detectedAt": "Detectada",
+      "description": "Descripción",
+      "resolve": "Marcar como resuelta",
+      "resolved": "Incidencia resuelta.",
+      "resolvedAt": "Resuelta el",
+      "noneOpen": "No hay incidencias abiertas.",
+      "emptyTitle": "Sin incidencias",
+      "emptyMessage": "Este lector no ha reportado problemas."
+    },
+    "incidentTypes": {
+      "CONNECTIVITY_FAILURE": "Falla de conectividad",
+      "READ_ERROR": "Error de lectura",
+      "DEVICE_OFFLINE": "Sin comunicación",
+      "CONFIGURATION_ERROR": "Error de configuración",
+      "HARDWARE_FAILURE": "Falla de hardware"
+    },
+    "notifications": {
+      "offlineTitle": "{{id}} sin conexión",
+      "incidentsTitle": "{{count}} incidencias abiertas en lectores",
+      "incidentsDetail": "Revisa los lectores degradados o en mantenimiento."
+    }
   },
   "status": {
     "credential": { "ACTIVE": "Activa", "BLOCKED": "Bloqueada", "LOST": "Perdida", "DEACTIVATED": "Desactivada" },

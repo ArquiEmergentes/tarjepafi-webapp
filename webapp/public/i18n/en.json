@@ -7,6 +7,14 @@
     "save": "Save",
     "search": "Search",
     "all": "All",
+    "allFem": "All",
+    "ago": {
+      "now": "Just now",
+      "seconds": "{{n}} s ago",
+      "minutes": "{{n}} min ago",
+      "hours": "{{n}} h ago",
+      "days": "{{n}} d ago"
+    },
     "clear": "Clear",
     "clearFilters": "Clear filters",
     "showing": "Showing {{from}}–{{to}} of {{total}}",
@@ -278,6 +286,178 @@
     "confirmMessage": "{{count}} cards of students with pending enrollment will be deactivated. This action is recorded in the history.",
     "confirmMessageInTime": "The enrollment deadline hasn't passed yet, so no card will be deactivated. Do you want to run the verification anyway?",
     "partialError": "{{count}} cards couldn't be deactivated. Run the verification again."
+  },
+  "readers": {
+    "title": "IoT readers",
+    "subtitle": "NFC readers registered at the San Miguel Campus.",
+    "tableTitle": "Readers",
+    "tableSubtitle": "Last connection is calculated with the simulated time.",
+    "emptyTitle": "No readers match",
+    "emptyMessage": "Try another ID or change the filters.",
+    "neverSeen": "No communication yet",
+    "openIncidents": "{{count}} open incidents",
+    "floor": "Floor {{n}}",
+    "kpis": {
+      "total": "Total readers",
+      "totalCaption": "Includes {{count}} in Degraded status",
+      "online": "Online",
+      "onlineCaption": "Active or degraded: they process taps",
+      "offline": "Offline",
+      "offlineCaption": "No heartbeat for 3 intervals",
+      "maintenance": "Under maintenance",
+      "maintenanceCaption": "Out of service for technical review"
+    },
+    "filters": {
+      "location": "Location",
+      "type": "Type",
+      "status": "Status",
+      "searchPlaceholder": "Reader ID or name"
+    },
+    "columns": {
+      "reader": "Reader",
+      "location": "Location",
+      "type": "Type",
+      "lastSeen": "Last connection",
+      "firmware": "Firmware",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "types": {
+      "CLASSROOM_READER": "Classroom reader",
+      "TURNSTILE": "Turnstile",
+      "DOOR_READER": "Door reader",
+      "DESK_READER": "Desk reader"
+    },
+    "modes": { "ATTENDANCE": "Attendance", "ACCESS_CONTROL": "Access control" },
+    "fields": {
+      "id": "Reader ID",
+      "name": "Name",
+      "type": "Device type",
+      "location": "Location",
+      "signal": "Signal strength",
+      "registeredAt": "Registered"
+    },
+    "register": {
+      "open": "Register reader",
+      "title": "Register reader",
+      "subtitle": "The reader is created as Registered; activate it once it's installed.",
+      "idHint": "Format RDR-X-000, for example RDR-A-304",
+      "namePlaceholder": "Classroom A-304 reader",
+      "submit": "Register",
+      "done": "Reader {{id}} registered."
+    },
+    "actions": {
+      "ACTIVATE": {
+        "short": "Activate",
+        "title": "Activate reader",
+        "message": "{{id}} · {{name}} will start processing card taps.",
+        "confirm": "Activate",
+        "done": "Reader {{id}} activated."
+      },
+      "DEACTIVATE": {
+        "short": "Deactivate",
+        "title": "Deactivate reader",
+        "message": "{{id}} · {{name}} will stop processing taps. Anyone tapping their card will see \"Reader out of service\".",
+        "confirm": "Deactivate",
+        "done": "Reader {{id}} deactivated."
+      },
+      "START_MAINTENANCE": {
+        "short": "Start maintenance",
+        "title": "Start maintenance",
+        "message": "{{id}} · {{name}} will be out of service until you end the maintenance.",
+        "confirm": "Start maintenance",
+        "done": "Reader {{id}} under maintenance."
+      },
+      "END_MAINTENANCE": {
+        "short": "End maintenance",
+        "title": "End maintenance",
+        "message": "{{id}} · {{name}} will be active again and will process taps.",
+        "confirm": "End maintenance",
+        "done": "Reader {{id}} is active again."
+      }
+    },
+    "errors": {
+      "MODE_REQUIRED": "Select the operating mode.",
+      "COMMUNICATION_INTERVAL_INVALID": "The communication interval must be a whole number greater than 0.",
+      "HEARTBEAT_INTERVAL_INVALID": "The heartbeat interval must be a whole number greater than 0.",
+      "HEARTBEAT_LOWER_THAN_COMMUNICATION": "The heartbeat must be greater than or equal to the communication interval.",
+      "FIRMWARE_FORMAT": "Use the x.y.z format, for example 2.4.1.",
+      "ID_FORMAT": "Use the RDR-X-000 format, for example RDR-A-304.",
+      "ID_TAKEN": "A reader with that ID already exists",
+      "NAME_REQUIRED": "Enter the reader name.",
+      "TYPE_REQUIRED": "Select the device type.",
+      "SPACE_REQUIRED": "Select the reader location.",
+      "NOT_ALLOWED": "This action isn't available for the reader's current status.",
+      "SAVE_FAILED": "We couldn't save your changes. Check that the API is running and try again."
+    },
+    "healthCheck": {
+      "run": "Run health check",
+      "ok": "{{id}} responded correctly · signal {{signal}} dBm.",
+      "reconnected": "{{id}} is connected again · signal {{signal}} dBm. The disconnection incident was closed."
+    },
+    "config": {
+      "readerMode": "Operating mode",
+      "firmwareVersion": "Firmware version",
+      "communicationInterval": "Communication interval",
+      "heartbeatInterval": "Heartbeat interval",
+      "rules": "Intervals must be greater than 0, the heartbeat greater than or equal to the communication interval and the firmware in x.y.z format. If the configuration is invalid, the previous one is kept.",
+      "offlineAfter": "The reader will be marked Offline if it sends no heartbeat for {{n}} intervals ({{seconds}} s).",
+      "reset": "Discard changes",
+      "save": "Save configuration",
+      "saved": "{{id}} configuration saved.",
+      "invalid": "The configuration isn't valid. The previous one is kept."
+    },
+    "alerts": {
+      "offlineTitle": "The reader hasn't communicated since {{time}}.",
+      "offlineMessage": "Run a health check or check its power and network connection. Meanwhile it doesn't process taps.",
+      "outOfServiceTitle": "This reader doesn't process taps.",
+      "outOfServiceMessage": "Anyone tapping their card will see \"Reader out of service\". Activate it or end the maintenance to use it again.",
+      "degradedTitle": "The reader is working with issues.",
+      "degradedMessage": "It still processes taps, but check its open incidents and signal."
+    },
+    "detail": {
+      "summary": "Summary",
+      "configuration": "Configuration",
+      "telemetry": "Telemetry",
+      "incidents": "Incidents",
+      "openIncidents": "Open incidents",
+      "notFoundTitle": "We couldn't find this reader",
+      "notFoundMessage": "The link may be wrong or the reader may no longer exist.",
+      "backToList": "Back to readers"
+    },
+    "signal": { "weak": "Weak signal", "good": "Stable signal" },
+    "telemetry": {
+      "title": "Recent telemetry",
+      "subtitle": "Signal strength (dBm) · last {{count}} samples",
+      "threshold": "Threshold {{value}} dBm",
+      "capturedAt": "Captured",
+      "uptime": "Uptime",
+      "emptyTitle": "No telemetry yet",
+      "emptyMessage": "The reader hasn't sent data yet. Activate it and run a health check."
+    },
+    "incidents": {
+      "type": "Type",
+      "detectedAt": "Detected",
+      "description": "Description",
+      "resolve": "Mark as resolved",
+      "resolved": "Incident resolved.",
+      "resolvedAt": "Resolved on",
+      "noneOpen": "There are no open incidents.",
+      "emptyTitle": "No incidents",
+      "emptyMessage": "This reader hasn't reported any issues."
+    },
+    "incidentTypes": {
+      "CONNECTIVITY_FAILURE": "Connectivity failure",
+      "READ_ERROR": "Read error",
+      "DEVICE_OFFLINE": "No communication",
+      "CONFIGURATION_ERROR": "Configuration error",
+      "HARDWARE_FAILURE": "Hardware failure"
+    },
+    "notifications": {
+      "offlineTitle": "{{id}} offline",
+      "incidentsTitle": "{{count}} open reader incidents",
+      "incidentsDetail": "Check degraded readers or readers under maintenance."
+    }
   },
   "status": {
     "credential": { "ACTIVE": "Active", "BLOCKED": "Blocked", "LOST": "Lost", "DEACTIVATED": "Deactivated" },

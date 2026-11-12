@@ -60,6 +60,18 @@ export function formatDuration(totalMinutes: number): string {
   return h === 0 ? `${m} min` : `${h} h ${pad(m)} min`;
 }
 
+export type ElapsedUnit = 'now' | 'seconds' | 'minutes' | 'hours' | 'days';
+
+/** Tiempo transcurrido entre dos fechas para mostrar "hace 8 s", "hace 6 min"… */
+export function elapsedSince(now: LocalDateTime, then: LocalDateTime): { unit: ElapsedUnit; value: number } {
+  const seconds = Math.max(0, Math.round((toMs(now) - toMs(then)) / 1000));
+  if (seconds < 5) return { unit: 'now', value: 0 };
+  if (seconds < 60) return { unit: 'seconds', value: seconds };
+  if (seconds < 3600) return { unit: 'minutes', value: Math.floor(seconds / 60) };
+  if (seconds < 86400) return { unit: 'hours', value: Math.floor(seconds / 3600) };
+  return { unit: 'days', value: Math.floor(seconds / 86400) };
+}
+
 /** Convierte una fecha local a Date para usar DatePipe con timeZone 'UTC'. */
 export function toDisplayDate(value: LocalDateTime | null | undefined): Date | null {
   return value ? new Date(toMs(value)) : null;

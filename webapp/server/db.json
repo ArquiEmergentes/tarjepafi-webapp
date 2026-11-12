@@ -625,9 +625,9 @@
       "id": "cred-009",
       "cardUid": "04:E7:58:67:B4",
       "cardHolderId": "ch-u202311096",
-      "status": "DEACTIVATED",
+      "status": "LOST",
       "issuedAt": "2026-08-17T09:00:00",
-      "statusChangedAt": "2026-10-07T09:50:00",
+      "statusChangedAt": "2026-09-28T10:15:00",
       "lastUsedAt": null
     },
     {
@@ -1108,16 +1108,6 @@
       "reason": "MANUAL",
       "changedBy": "usr-001",
       "changedAt": "2026-09-15T12:00:00"
-    },
-    {
-      "id": "csh-mwd1qq1c56e81523",
-      "credentialId": "cred-009",
-      "fromStatus": "LOST",
-      "toStatus": "DEACTIVATED",
-      "reason": "WITHDRAWAL",
-      "changedBy": "usr-001",
-      "changedAt": "2026-10-07T09:50:00",
-      "note": null
     }
   ],
   "credentialPermissions": [
@@ -6974,7 +6964,7 @@
       "name": "Torniquete Salida 2",
       "deviceType": "TURNSTILE",
       "spaceId": "sp-sal-01",
-      "status": "ACTIVE",
+      "status": "OFFLINE",
       "configuration": {
         "readerMode": "ACCESS_CONTROL",
         "communicationInterval": 30,
@@ -8196,6 +8186,14 @@
       "detectedAt": "2026-10-06T08:00:00",
       "description": "Intervalo de heartbeat menor al de comunicación.",
       "resolvedAt": "2026-10-06T08:20:00"
+    },
+    {
+      "id": "inc-mwd2eecm010e7d23",
+      "readerId": "RDR-T-004",
+      "type": "DEVICE_OFFLINE",
+      "detectedAt": "2026-10-07T09:50:00",
+      "description": "El lector no envía heartbeats desde 2026-10-07 09:40.",
+      "resolvedAt": null
     }
   ],
   "cardTapEvents": [
@@ -17279,19 +17277,30 @@
       }
     },
     {
-      "id": "dr-mwd1qq4b37f7f49a",
-      "eventId": "evt-mwd1qq4b29a04db2",
-      "sourceContext": "CREDENTIALS",
-      "dataType": "CREDENTIAL_CHANGE",
-      "subjectId": "cred-009",
+      "id": "dr-mwd2eebj29890b97",
+      "eventId": "evt-mwd2eebj542040af",
+      "sourceContext": "IOT_MONITORING",
+      "dataType": "DEVICE_TELEMETRY",
+      "subjectId": "RDR-T-004",
       "occurredAt": "2026-10-07T09:50:00",
       "recordedAt": "2026-10-07T09:50:00",
       "payload": {
-        "fromStatus": "LOST",
-        "toStatus": "DEACTIVATED",
-        "reason": "WITHDRAWAL",
-        "changedBy": "usr-001",
-        "note": null
+        "fromStatus": "ACTIVE",
+        "toStatus": "OFFLINE",
+        "action": "CONNECTION_LOST"
+      }
+    },
+    {
+      "id": "dr-mwd2eedn15b13b7f",
+      "eventId": "evt-mwd2eedn4f72c4f4",
+      "sourceContext": "IOT_MONITORING",
+      "dataType": "DEVICE_TELEMETRY",
+      "subjectId": "RDR-T-004",
+      "occurredAt": "2026-10-07T09:50:00",
+      "recordedAt": "2026-10-07T09:50:00",
+      "payload": {
+        "incidentType": "DEVICE_OFFLINE",
+        "incidentId": "inc-mwd2eecm010e7d23"
       }
     }
   ],

@@ -1,0 +1,139 @@
+.kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
+}
+
+.status-chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 12px 0 6px;
+  border: 1px solid var(--tp-border-soft);
+  border-radius: 999px;
+  background: var(--tp-white);
+  cursor: pointer;
+  font-family: inherit;
+  strong {
+    font-size: 13px;
+    color: var(--tp-text);
+  }
+  &:hover {
+    border-color: var(--tp-border);
+  }
+  &.on {
+    border-color: var(--tp-cyan);
+    box-shadow: 0 0 0 1px var(--tp-cyan);
+  }
+}
+
+.filters {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  .f-select {
+    width: 200px;
+  }
+  .f-search {
+    flex: 1;
+    min-width: 240px;
+    max-width: 360px;
+  }
+}
+
+.table-card {
+  padding: 0;
+  overflow: hidden;
+}
+.table-head {
+  padding: 24px 24px 16px;
+  p {
+    margin: 2px 0 0;
+    font-size: 12px;
+  }
+}
+
+.reader {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  > span:last-child {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.3;
+  }
+  strong {
+    font-weight: 600;
+  }
+  small {
+    color: var(--tp-muted);
+    font-size: 12px;
+  }
+}
+.reader-icon {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--tp-bg);
+  color: var(--tp-text);
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+}
+.mode {
+  display: block;
+  color: var(--tp-muted);
+  font-size: 12px;
+}
+.nowrap {
+  white-space: nowrap;
+}
+.stale {
+  color: #b91c1c;
+  font-weight: 500;
+}
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.incidents {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--tp-warning-text);
+  mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
+}
+.end {
+  text-align: right;
+}
+.row-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.link {
+  font: 600 13px var(--tp-font-ui);
+  color: var(--tp-cyan-text);
+  white-space: nowrap;
+}
+tr.busy {
+  opacity: 0.5;
+  pointer-events: none;
+}
