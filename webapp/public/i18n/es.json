@@ -1,0 +1,117 @@
+{
+  "common": {
+    "retry": "Reintentar",
+    "close": "Cerrar",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "save": "Guardar",
+    "search": "Buscar",
+    "all": "Todos",
+    "reasonRequired": "Ingresa un motivo para continuar.",
+    "loadError": "No pudimos cargar la información. Verifica que la API esté en ejecución e inténtalo de nuevo.",
+    "saveError": "No pudimos guardar los cambios. Inténtalo de nuevo."
+  },
+  "nav": {
+    "main": "Navegación principal",
+    "profile": "Mi perfil",
+    "dashboard": "Dashboard",
+    "credentials": "Credenciales",
+    "enrollmentCheck": "Verificar matrículas",
+    "readers": "Lectores IoT",
+    "simulator": "Simulador NFC",
+    "accessRecords": "Registros de acceso",
+    "reports": "Reportes",
+    "mySessions": "Mis sesiones",
+    "myAttendance": "Mi asistencia docente",
+    "myMeetings": "Mis reuniones",
+    "comingSoon": "Mi portal",
+    "collapse": "Contraer menú",
+    "sections": {
+      "overview": "General",
+      "credentials": "Credenciales",
+      "iot": "Infraestructura IoT",
+      "data": "Datos",
+      "teaching": "Docencia",
+      "account": "Cuenta",
+      "portal": "Portal"
+    }
+  },
+  "header": {
+    "campus": "Sede San Miguel",
+    "simulatedTime": "Hora simulada",
+    "clockHint": "Cámbiala desde el Simulador NFC",
+    "language": "Idioma",
+    "notifications": "Notificaciones",
+    "noNotifications": "No tienes notificaciones nuevas."
+  },
+  "roles": {
+    "ADMIN": "Administrador",
+    "TEACHER": "Docente",
+    "STUDENT": "Estudiante",
+    "STAFF": "Trabajador"
+  },
+  "auth": {
+    "title": "Iniciar sesión",
+    "subtitle": "Accede con tu cuenta institucional para gestionar la Sede San Miguel.",
+    "email": "Correo institucional",
+    "password": "Contraseña",
+    "showPassword": "Mostrar contraseña",
+    "hidePassword": "Ocultar contraseña",
+    "remember": "Recordarme",
+    "submit": "Iniciar sesión",
+    "signOut": "Cerrar sesión",
+    "errors": {
+      "EMAIL_REQUIRED": "Ingresa tu correo institucional.",
+      "PASSWORD_REQUIRED": "Ingresa tu contraseña.",
+      "INVALID_EMAIL": "Ingresa un correo institucional válido.",
+      "INVALID_CREDENTIALS": "Correo o contraseña incorrectos.",
+      "ACCOUNT_DISABLED": "Tu cuenta no está habilitada. Contacta al administrador.",
+      "NETWORK": "No pudimos conectar con el servidor. Verifica que la API esté en ejecución e inténtalo de nuevo."
+    }
+  },
+  "profile": {
+    "title": "Mi perfil",
+    "subtitle": "Datos de tu cuenta en TarjePAFI.",
+    "account": "Cuenta",
+    "role": "Rol",
+    "status": "Estado de la cuenta",
+    "email": "Correo",
+    "createdAt": "Cuenta creada",
+    "campus": "Sede"
+  },
+  "comingSoon": {
+    "title": "Tu portal estará disponible próximamente",
+    "message": "Hola, {{name}}. Estamos preparando tu portal en TarjePAFI. Mientras tanto, tu credencial sigue funcionando en los lectores del campus."
+  },
+  "accessDenied": {
+    "title": "Acceso denegado",
+    "message": "Tu rol no tiene permiso para ver esta sección. Si crees que es un error, contacta al administrador.",
+    "goHome": "Ir al inicio"
+  },
+  "pendingPhase": {
+    "title": "Pantalla en construcción",
+    "message": "Esta vista se implementa en la fase {{phase}} del Sprint 1."
+  },
+  "status": {
+    "credential": { "ACTIVE": "Activa", "BLOCKED": "Bloqueada", "LOST": "Perdida", "DEACTIVATED": "Desactivada" },
+    "reader": {
+      "REGISTERED": "Registrado",
+      "ACTIVE": "Activo",
+      "INACTIVE": "Inactivo",
+      "OFFLINE": "Sin conexión",
+      "DEGRADED": "Degradado",
+      "MAINTENANCE": "Mantenimiento"
+    },
+    "session": { "SCHEDULED": "Programada", "IN_PROGRESS": "En curso", "FINISHED": "Finalizada" },
+    "attendance": { "PENDING": "Pendiente", "PRESENT": "Presente", "LATE": "Tarde", "ABSENT": "Ausente" },
+    "decision": { "GRANTED": "Concedido", "DENIED": "Denegado" },
+    "user": { "ACTIVE": "Activa", "INACTIVE": "Inactiva", "SUSPENDED": "Suspendida" },
+    "report": { "GENERATING": "Generando", "GENERATED": "Generado", "ERROR": "Error" },
+    "enrollment": { "COMPLETED": "Completada", "PENDING": "Pendiente" },
+    "shift": { "OPEN": "Abierta", "CLOSED": "Cerrada" },
+    "incident": { "OPEN": "Abierta", "RESOLVED": "Resuelta" },
+    "outcome": { "ATTENDANCE": "Asistencia", "ACCESS": "Acceso", "WORK_SHIFT": "Jornada", "REJECTED": "Rechazada" },
+    "role": { "ADMIN": "Administrador", "TEACHER": "Docente", "STUDENT": "Estudiante", "STAFF": "Trabajador" },
+    "space": { "AVAILABLE": "Disponible", "MAINTENANCE": "Mantenimiento" }
+  }
+}

@@ -1,0 +1,319 @@
+// TarjePAFI · Design System (sección 8 del prompt). Material se usa como base, nunca con su look por defecto.
+@use '@angular/material' as mat;
+
+:root {
+  // Colores
+  --tp-navy: #0a2540;
+  --tp-navy-700: #0f2f50;
+  --tp-navy-600: #17406a;
+  --tp-cyan: #0284c7;
+  --tp-cyan-hover: #0369a1;
+  --tp-cyan-text: #0369a1; // texto pequeño sobre fondo claro (WCAG AA)
+  --tp-brand-light: #e0f2fe;
+  --tp-text: #0f172a;
+  --tp-muted: #475569;
+  --tp-border: #cbd5e1;
+  --tp-border-soft: #e2e8f0;
+  --tp-bg: #f8fafc;
+  --tp-white: #ffffff;
+  --tp-success: #059669;
+  --tp-success-bg: #ecfdf5;
+  --tp-warning: #d97706;
+  --tp-warning-text: #b45309; // texto pequeño sobre fondo claro (WCAG AA)
+  --tp-warning-bg: #fffbeb;
+  --tp-error: #dc2626;
+  --tp-error-bg: #fef2f2;
+  --tp-info: #2563eb;
+  --tp-info-bg: #eff6ff;
+  --tp-neutral-bg: #f1f5f9;
+  --tp-backdrop: rgb(15 23 42 / 50%);
+
+  // Tipografía
+  --tp-font-title: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+  --tp-font-ui: 'Inter', system-ui, sans-serif;
+
+  // Espaciado (múltiplos de 8) y radios
+  --tp-space-1: 8px;
+  --tp-space-2: 16px;
+  --tp-space-3: 24px;
+  --tp-space-4: 32px;
+  --tp-space-5: 40px;
+  --tp-radius-control: 8px;
+  --tp-radius-card: 12px;
+
+  // Layout
+  --tp-sidebar-expanded: 240px;
+  --tp-sidebar-collapsed: 72px;
+  --tp-header-height: 64px;
+  --tp-shadow-card: 0 1px 2px rgb(15 23 42 / 4%);
+}
+
+html {
+  height: 100%;
+  color-scheme: light;
+  @include mat.theme(
+    (
+      color: (
+        primary: mat.$azure-palette,
+        tertiary: mat.$blue-palette,
+        theme-type: light,
+      ),
+      typography: (
+        plain-family: 'Inter',
+        brand-family: 'Plus Jakarta Sans',
+        bold-weight: 600,
+        medium-weight: 500,
+        regular-weight: 400,
+      ),
+      density: 0,
+    )
+  );
+
+  @include mat.theme-overrides(
+    (
+      primary: #0284c7,
+      on-primary: #ffffff,
+      primary-container: #e0f2fe,
+      on-primary-container: #0369a1,
+      secondary-container: #e0f2fe,
+      on-secondary-container: #0369a1,
+      error: #dc2626,
+      on-error: #ffffff,
+      surface: #ffffff,
+      on-surface: #0f172a,
+      on-surface-variant: #475569,
+      outline: #cbd5e1,
+      outline-variant: #e2e8f0,
+      surface-container-lowest: #ffffff,
+      surface-container-low: #ffffff,
+      surface-container: #ffffff,
+      surface-container-high: #ffffff,
+      surface-container-highest: #f1f5f9,
+      background: #f8fafc,
+      corner-small: 8px,
+      corner-medium: 12px,
+      corner-large: 12px,
+      corner-extra-small: 8px,
+    )
+  );
+
+  // Botones de 40 px, radio 8, texto 14 SemiBold
+  @include mat.button-overrides(
+    (
+      filled-container-height: 40px,
+      filled-container-shape: 8px,
+      filled-label-text-size: 14px,
+      filled-label-text-weight: 600,
+      outlined-container-height: 40px,
+      outlined-container-shape: 8px,
+      outlined-label-text-size: 14px,
+      outlined-label-text-weight: 600,
+      outlined-outline-color: #0284c7,
+      outlined-outline-width: 1.5px,
+      text-container-height: 40px,
+      text-container-shape: 8px,
+      text-label-text-size: 14px,
+      text-label-text-weight: 600,
+      protected-container-height: 40px,
+      protected-container-shape: 8px,
+    )
+  );
+
+  // Inputs de 52 px con radio 8
+  @include mat.form-field-overrides(
+    (
+      container-height: 52px,
+      container-vertical-padding: 14px,
+      outlined-container-shape: 8px,
+      outlined-outline-color: #cbd5e1,
+      outlined-hover-outline-color: #94a3b8,
+      outlined-focus-outline-color: #0284c7,
+    )
+  );
+
+  @include mat.dialog-overrides(
+    (
+      container-shape: 12px,
+      container-color: #ffffff,
+    )
+  );
+
+  @include mat.card-overrides(
+    (
+      outlined-container-shape: 12px,
+      outlined-outline-color: #e2e8f0,
+    )
+  );
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  height: 100%;
+  background-color: var(--tp-bg);
+  color: var(--tp-text);
+  font-family: var(--tp-font-ui);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+// ---------- Tipografía ----------
+h1,
+.tp-h1 {
+  font-family: var(--tp-font-title);
+  font-size: 28px;
+  line-height: 36px;
+  font-weight: 600;
+  margin: 0;
+  color: var(--tp-text);
+}
+h2,
+.tp-h2 {
+  font-family: var(--tp-font-title);
+  font-size: 22px;
+  line-height: 30px;
+  font-weight: 500;
+  margin: 0;
+}
+h3,
+.tp-h3 {
+  font-family: var(--tp-font-ui);
+  font-size: 18px;
+  line-height: 26px;
+  font-weight: 600;
+  margin: 0;
+}
+.tp-body-lg {
+  font-size: 16px;
+  line-height: 24px;
+}
+.tp-small {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 500;
+}
+.tp-muted {
+  color: var(--tp-muted);
+}
+a {
+  color: var(--tp-cyan-text);
+  font-weight: 600;
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+// ---------- Iconos (Material Symbols) ----------
+.material-symbols-outlined {
+  font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 20;
+}
+mat-icon.mat-icon {
+  overflow: visible;
+}
+
+// ---------- Superficies ----------
+.tp-card {
+  background: var(--tp-white);
+  border: 1px solid var(--tp-border-soft);
+  border-radius: var(--tp-radius-card);
+  box-shadow: var(--tp-shadow-card);
+  padding: var(--tp-space-3);
+}
+
+.tp-page {
+  padding: var(--tp-space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--tp-space-3);
+  max-width: 1440px;
+}
+
+// ---------- Botón destructivo ----------
+.mat-mdc-unelevated-button.tp-btn-danger:not(:disabled) {
+  --mat-button-filled-container-color: var(--tp-error);
+  --mat-button-filled-label-text-color: #ffffff;
+}
+
+// ---------- Inputs: errores 4 px debajo, en rojo y con icono ----------
+.mat-mdc-form-field-error-wrapper {
+  padding: 4px 0 0 !important;
+}
+.mat-mdc-form-field-error {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--tp-error) !important;
+  font-size: 12px;
+  font-weight: 500;
+  &::before {
+    content: 'error';
+    font-family: 'Material Symbols Outlined';
+    font-size: 16px;
+    line-height: 1;
+  }
+}
+
+// ---------- Modal: backdrop #0F172A al 50 % ----------
+.cdk-overlay-dark-backdrop.tp-backdrop {
+  background: var(--tp-backdrop);
+}
+
+// ---------- Toast abajo a la derecha ----------
+.mat-mdc-snack-bar-container.tp-toast {
+  --mat-snack-bar-container-shape: 8px;
+  --mat-snack-bar-container-color: var(--tp-text);
+  --mat-snack-bar-supporting-text-color: #ffffff;
+  --mat-snack-bar-button-color: #7dd3fc;
+  margin: var(--tp-space-3) !important;
+  &.tp-toast--success {
+    --mat-snack-bar-container-color: #065f46;
+  }
+  &.tp-toast--error {
+    --mat-snack-bar-container-color: #991b1b;
+    --mat-snack-bar-button-color: #fecaca;
+  }
+}
+
+// ---------- Tablas ----------
+.tp-table-wrap {
+  overflow-x: auto;
+}
+table.mat-mdc-table {
+  --mat-table-header-headline-color: var(--tp-muted);
+  --mat-table-header-headline-size: 12px;
+  --mat-table-header-headline-weight: 600;
+  --mat-table-row-item-outline-color: var(--tp-border-soft);
+  --mat-table-header-container-height: 44px;
+  --mat-table-row-item-container-height: 56px;
+  background: transparent;
+  th.mat-mdc-header-cell {
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    background: var(--tp-bg);
+  }
+}
+
+// ---------- Pestañas ----------
+.mat-mdc-tab-group {
+  --mat-tab-active-label-text-color: var(--tp-cyan-text);
+  --mat-tab-active-indicator-color: var(--tp-cyan);
+  --mat-tab-inactive-label-text-color: var(--tp-muted);
+  --mat-tab-label-text-weight: 600;
+}
+
+// Accesibilidad: foco visible
+:focus-visible {
+  outline: 2px solid var(--tp-cyan);
+  outline-offset: 2px;
+}
