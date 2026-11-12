@@ -304,6 +304,46 @@ table.mat-mdc-table {
   }
 }
 
+table.tp-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  th {
+    height: 44px;
+    padding: 0 16px;
+    text-align: left;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--tp-muted);
+    background: var(--tp-bg);
+    border-top: 1px solid var(--tp-border-soft);
+    border-bottom: 1px solid var(--tp-border-soft);
+    white-space: nowrap;
+  }
+  td {
+    height: 56px;
+    padding: 8px 16px;
+    border-bottom: 1px solid var(--tp-border-soft);
+    vertical-align: middle;
+  }
+  th:first-child,
+  td:first-child {
+    padding-left: 24px;
+  }
+  th:last-child,
+  td:last-child {
+    padding-right: 24px;
+  }
+  tbody tr:last-child td {
+    border-bottom: 0;
+  }
+  tbody tr:hover td {
+    background: #fbfdff;
+  }
+}
+
 // ---------- Pestañas ----------
 .mat-mdc-tab-group {
   --mat-tab-active-label-text-color: var(--tp-cyan-text);

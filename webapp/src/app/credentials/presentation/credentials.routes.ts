@@ -1,10 +1,13 @@
 import { Routes } from '@angular/router';
-import { PendingPhasePage } from '../../shared/presentation/pages/pending-phase/pending-phase';
 
 export const CREDENTIALS_ROUTES: Routes = [
-  { path: '', component: PendingPhasePage, data: { titleKey: 'nav.credentials', phase: 2 } },
+  { path: '', loadComponent: () => import('./views/credential-list/credential-list').then((m) => m.CredentialListPage) },
+  {
+    path: ':credentialId',
+    loadComponent: () => import('./views/credential-detail/credential-detail').then((m) => m.CredentialDetailPage),
+  },
 ];
 
 export const ENROLLMENT_CHECK_ROUTES: Routes = [
-  { path: '', component: PendingPhasePage, data: { titleKey: 'nav.enrollmentCheck', phase: 2 } },
+  { path: '', loadComponent: () => import('./views/enrollment-check/enrollment-check').then((m) => m.EnrollmentCheckPage) },
 ];

@@ -625,9 +625,9 @@
       "id": "cred-009",
       "cardUid": "04:E7:58:67:B4",
       "cardHolderId": "ch-u202311096",
-      "status": "LOST",
+      "status": "DEACTIVATED",
       "issuedAt": "2026-08-17T09:00:00",
-      "statusChangedAt": "2026-09-28T10:15:00",
+      "statusChangedAt": "2026-10-07T09:50:00",
       "lastUsedAt": null
     },
     {
@@ -1108,6 +1108,16 @@
       "reason": "MANUAL",
       "changedBy": "usr-001",
       "changedAt": "2026-09-15T12:00:00"
+    },
+    {
+      "id": "csh-mwd1qq1c56e81523",
+      "credentialId": "cred-009",
+      "fromStatus": "LOST",
+      "toStatus": "DEACTIVATED",
+      "reason": "WITHDRAWAL",
+      "changedBy": "usr-001",
+      "changedAt": "2026-10-07T09:50:00",
+      "note": null
     }
   ],
   "credentialPermissions": [
@@ -17266,6 +17276,22 @@
         "sessionId": "ses-06-7",
         "role": "STUDENT",
         "status": "ABSENT"
+      }
+    },
+    {
+      "id": "dr-mwd1qq4b37f7f49a",
+      "eventId": "evt-mwd1qq4b29a04db2",
+      "sourceContext": "CREDENTIALS",
+      "dataType": "CREDENTIAL_CHANGE",
+      "subjectId": "cred-009",
+      "occurredAt": "2026-10-07T09:50:00",
+      "recordedAt": "2026-10-07T09:50:00",
+      "payload": {
+        "fromStatus": "LOST",
+        "toStatus": "DEACTIVATED",
+        "reason": "WITHDRAWAL",
+        "changedBy": "usr-001",
+        "note": null
       }
     }
   ],

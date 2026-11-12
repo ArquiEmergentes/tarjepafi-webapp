@@ -7,7 +7,14 @@
     "save": "Guardar",
     "search": "Buscar",
     "all": "Todos",
+    "clear": "Limpiar",
+    "clearFilters": "Limpiar filtros",
+    "showing": "Mostrando {{from}}–{{to}} de {{total}}",
+    "pagination": "Paginación",
+    "previous": "Página anterior",
+    "next": "Página siguiente",
     "reasonRequired": "Ingresa un motivo para continuar.",
+    "loadErrorTitle": "No pudimos cargar esta sección",
     "loadError": "No pudimos cargar la información. Verifica que la API esté en ejecución e inténtalo de nuevo.",
     "saveError": "No pudimos guardar los cambios. Inténtalo de nuevo."
   },
@@ -91,6 +98,186 @@
   "pendingPhase": {
     "title": "Pantalla en construcción",
     "message": "Esta vista se implementa en la fase {{phase}} del Sprint 1."
+  },
+  "credentials": {
+    "title": "Credenciales",
+    "subtitle": "Tarjetas NFC asignadas a estudiantes, docentes y trabajadores de la sede.",
+    "tableTitle": "Credenciales emitidas",
+    "tableSubtitle": "{{total}} tarjetas NFC registradas en la sede",
+    "emptyTitle": "No hay credenciales que coincidan",
+    "emptyMessage": "Prueba con otro nombre, código o UID, o cambia los filtros.",
+    "unlinked": "Tarjeta sin vincular",
+    "unlinkedHint": "Sin titular asignado",
+    "neverUsed": "Sin uso registrado",
+    "viewDetail": "Ver detalle",
+    "moreActions": "Más acciones",
+    "kpis": {
+      "ACTIVE": "Activas",
+      "ACTIVE_caption": "{{percent}} % del total emitido",
+      "BLOCKED": "Bloqueadas",
+      "BLOCKED_caption": "Bloqueo manual o por seguridad",
+      "LOST": "Perdidas",
+      "LOST_caption": "Reportadas por el titular",
+      "DEACTIVATED": "Desactivadas",
+      "DEACTIVATED_caption": "Retiros, ceses y matrícula no completada"
+    },
+    "filters": {
+      "role": "Tipo de usuario",
+      "status": "Estado",
+      "searchPlaceholder": "Nombre, código, correo o UID",
+      "roles": { "ALL": "Todos", "STUDENT": "Estudiantes", "TEACHER": "Docentes", "STAFF": "Trabajadores", "UNLINKED": "Sin titular" }
+    },
+    "columns": {
+      "holder": "Usuario",
+      "code": "Código",
+      "role": "Tipo de usuario",
+      "uid": "UID tarjeta",
+      "status": "Estado",
+      "lastUsed": "Último uso",
+      "actions": "Acción"
+    },
+    "actions": {
+      "BLOCK": {
+        "short": "Bloquear",
+        "title": "Bloquear tarjeta",
+        "message": "La tarjeta {{uid}} de {{holder}} dejará de funcionar en todos los lectores hasta que se reactive.",
+        "confirm": "Bloquear tarjeta",
+        "done": "Tarjeta {{uid}} bloqueada."
+      },
+      "REPORT_LOST": {
+        "short": "Reportar pérdida",
+        "title": "Reportar pérdida",
+        "message": "La tarjeta {{uid}} de {{holder}} quedará marcada como perdida y dejará de funcionar en los lectores.",
+        "confirm": "Reportar pérdida",
+        "done": "Tarjeta {{uid}} reportada como perdida."
+      },
+      "DEACTIVATE": {
+        "short": "Dar de baja",
+        "title": "Dar de baja la tarjeta",
+        "message": "La tarjeta {{uid}} de {{holder}} quedará desactivada y se cancelará su acceso a los servicios del campus.",
+        "confirm": "Dar de baja",
+        "done": "Tarjeta {{uid}} dada de baja."
+      },
+      "REACTIVATE": {
+        "short": "Reactivar",
+        "title": "Reactivar tarjeta",
+        "message": "La tarjeta {{uid}} de {{holder}} volverá a funcionar en los lectores del campus.",
+        "studentHint": "Solo se puede reactivar si la matrícula del estudiante está completa.",
+        "confirm": "Reactivar tarjeta",
+        "done": "Tarjeta {{uid}} reactivada."
+      }
+    },
+    "fields": {
+      "reason": "Motivo",
+      "noteRequired": "Motivo (obligatorio)",
+      "noteOptional": "Detalle (opcional)"
+    },
+    "reasons": {
+      "WITHDRAWAL": "Retiro de la universidad",
+      "REENROLLMENT": "Reincorporación",
+      "ENROLLMENT_NOT_COMPLETED": "Matrícula no completada",
+      "LOST": "Pérdida",
+      "MANUAL": "Gestión manual"
+    },
+    "errors": {
+      "NOT_ALLOWED": "Esta acción no está disponible para el estado actual de la tarjeta.",
+      "NOTE_REQUIRED": "Ingresa un motivo para continuar.",
+      "HOLDER_NOT_FOUND": "Titular no encontrado",
+      "HOLDER_HAS_ACTIVE_CARD": "El titular ya tiene una tarjeta activa ({{uid}}). Desactívala antes de continuar.",
+      "ENROLLMENT_NOT_COMPLETED": "No se puede reactivar: la matrícula del estudiante está pendiente.",
+      "ALREADY_LINKED": "La tarjeta ya está vinculada a este titular.",
+      "SAVE_FAILED": "No pudimos guardar los cambios. Verifica que la API esté en ejecución e inténtalo de nuevo."
+    },
+    "link": {
+      "title": "Vincular titular",
+      "updateTitle": "Actualizar titular",
+      "message": "Busca al titular por su código institucional para vincularlo con la tarjeta {{uid}}.",
+      "current": "Titular actual",
+      "code": "Código del titular",
+      "confirm": "Vincular",
+      "short": "Vincular titular",
+      "updateShort": "Actualizar titular",
+      "done": "Tarjeta {{uid}} vinculada a {{holder}}."
+    },
+    "detail": {
+      "holder": "Titular",
+      "fullName": "Nombre completo",
+      "email": "Correo",
+      "program": "Carrera",
+      "area": "Área",
+      "enrollment": "Matrícula",
+      "noHolderTitle": "Esta tarjeta no tiene titular",
+      "noHolderMessage": "Vincúlala con un estudiante, docente o trabajador para que pueda usarse en los lectores.",
+      "card": "Tarjeta NFC",
+      "issuedAt": "Emitida",
+      "statusChangedAt": "Último cambio de estado",
+      "historyTab": "Historial de estados",
+      "permissionsTab": "Permisos",
+      "notFoundTitle": "No encontramos esta credencial",
+      "notFoundMessage": "Puede que el enlace sea incorrecto o que la tarjeta ya no exista.",
+      "backToList": "Volver a credenciales"
+    },
+    "history": {
+      "date": "Fecha",
+      "change": "Cambio",
+      "detail": "Detalle",
+      "actor": "Realizado por",
+      "system": "Sistema (automático)",
+      "holderUpdated": "Titular actualizado",
+      "emptyTitle": "Sin cambios registrados",
+      "emptyMessage": "Esta tarjeta mantiene el estado con el que fue emitida."
+    },
+    "permissions": {
+      "rule": "Primero se aplican las excepciones de esta tarjeta; si un espacio no tiene excepción, se usan los roles permitidos del espacio.",
+      "space": "Espacio",
+      "effect": "Excepción",
+      "effects": { "ALLOW": "Permitir", "DENY": "Denegar" },
+      "add": "Guardar excepción",
+      "unlinkedNote": "La tarjeta no tiene titular: sin excepción, ningún espacio concede acceso por rol.",
+      "allowedRoles": "Roles permitidos",
+      "exception": "Excepción de la tarjeta",
+      "effective": "Acceso efectivo",
+      "basis": { "EXCEPTION": "por excepción", "ROLE": "por rol" },
+      "remove": "Quitar excepción",
+      "removeTitle": "Quitar excepción",
+      "removeMessage": "El acceso a {{space}} volverá a depender de los roles permitidos del espacio.",
+      "saved": "Excepción guardada.",
+      "removed": "Excepción eliminada."
+    },
+    "notifications": {
+      "enrollmentTitle": "{{count}} tarjetas por desactivar",
+      "enrollmentDetail": "Estudiantes con matrícula pendiente después del plazo.",
+      "blockedTitle": "{{count}} tarjetas bloqueadas",
+      "blockedDetail": "Revisa si alguna debe reactivarse o darse de baja."
+    }
+  },
+  "enrollmentCheck": {
+    "title": "Verificar matrículas",
+    "subtitle": "Desactiva automáticamente las tarjetas de estudiantes que no completaron su matrícula a tiempo.",
+    "run": "Ejecutar verificación",
+    "term": "Ciclo",
+    "deadline": "Fecha límite de matrícula",
+    "now": "Fecha actual (simulada)",
+    "deadlineState": "Plazo",
+    "deadlinePassed": "Plazo vencido",
+    "deadlineOpen": "Dentro del plazo",
+    "rule": "Si la fecha actual supera la fecha límite, las tarjetas activas de estudiantes con matrícula pendiente pasan a Desactivada (motivo: matrícula no completada, autor: Sistema). Las demás no cambian.",
+    "resultTitle": "Resultado de la verificación",
+    "executedAt": "Ejecutada el",
+    "summary": "{{deactivated}} desactivadas, {{unchanged}} sin cambios",
+    "notYet": "El plazo de matrícula aún no vence, por eso no se desactivó ninguna tarjeta.",
+    "deactivated": "Desactivadas",
+    "unchanged": "Sin cambios",
+    "candidatesTitle": "Tarjetas que se desactivarán",
+    "candidatesSubtitle": "Tarjetas activas de estudiantes con matrícula pendiente. Otras {{unchanged}} tarjetas activas de estudiantes no cambian.",
+    "noCandidatesTitle": "No hay tarjetas por desactivar",
+    "noCandidatesMessage": "Todos los estudiantes con tarjeta activa completaron su matrícula.",
+    "inTimeTitle": "El plazo de matrícula sigue abierto",
+    "inTimeMessage": "Cuando la fecha actual supere la fecha límite, aquí verás las tarjetas que se desactivarán.",
+    "confirmTitle": "Ejecutar verificación de matrículas",
+    "confirmMessage": "Se desactivarán {{count}} tarjetas de estudiantes con matrícula pendiente. Esta acción queda registrada en el historial.",
+    "confirmMessageInTime": "El plazo de matrícula aún no vence, así que no se desactivará ninguna tarjeta. ¿Deseas ejecutar la verificación de todos modos?",
+    "partialError": "{{count}} tarjetas no se pudieron desactivar. Ejecuta la verificación otra vez."
   },
   "status": {
     "credential": { "ACTIVE": "Activa", "BLOCKED": "Bloqueada", "LOST": "Perdida", "DEACTIVATED": "Desactivada" },
