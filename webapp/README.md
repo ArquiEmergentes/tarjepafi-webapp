@@ -47,7 +47,21 @@ npm run dev
 | `npm run api` | Solo la API (`json-server` 0.17.4 con `server/routes.json`, prefijo `/api/v1`) |
 | `npm run api:seed` | Regenera `server/db.json` con los datos iniciales |
 | `npm run build` | Compilación de producción (`ng build`) |
-| `npm test` | Tests unitarios de dominio (Vitest) |
+| `npm test` / `npm run test:unit` | Unit Tests de dominio (Vitest) |
+| `npm run test:bdd` | Integration y Acceptance Tests BDD (Gherkin + Playwright); levanta su propia API y la app |
+| `npm run test:integration` | Solo los Integration Tests contra la Fake API |
+| `npm run test:report` | Abre el reporte HTML de Playwright |
+
+### Testing
+
+| Tipo | Herramienta | Ubicación |
+|---|---|---|
+| Unit Tests | Vitest (`@angular/build:unit-test`) | `src/app/**/domain/model/*.spec.ts` |
+| Integration Tests (BDD) | playwright-bdd + Gherkin, contra la Fake API `/api/v1` | `e2e/features/integration/*.feature` |
+| Acceptance Tests (BDD) | playwright-bdd + Gherkin, usando la aplicación en Chromium | `e2e/features/acceptance/*.feature` |
+| Step definitions | TypeScript | `e2e/steps/*.steps.ts` |
+
+La primera vez instala el navegador con `npx playwright install chromium`. Los tests BDD generan su propia base (`e2e/.db/db.e2e.json`) y **no modifican `server/db.json`**. Antes de ejecutarlos detén `npm run dev`, porque usan los puertos 3000 y 4200. Primero corren los Integration Tests (con los datos recién generados) y luego los Acceptance Tests, en orden y con un solo worker. Al terminar quedan el reporte Cucumber en `cucumber-report/index.html` y el de Playwright en `playwright-report/`.
 
 ### Volver a los datos iniciales
 
