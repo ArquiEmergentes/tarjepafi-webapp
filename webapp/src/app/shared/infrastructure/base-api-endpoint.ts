@@ -35,7 +35,7 @@ export abstract class BaseApiEndpoint<TEntity extends { id: string }, TResource 
     collection: string,
     protected readonly assembler: BaseAssembler<TEntity, TResource>,
   ) {
-    this.endpointUrl = `${environment.apiBaseUrl}/${collection}`;
+    this.endpointUrl = `${environment.legacyApiBaseUrl}/${collection}`;
   }
 
   getAll(query?: Query): Observable<TEntity[]> {

@@ -1,6 +1,6 @@
 import { ApplicationConfig, inject, provideAppInitializer, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
-import { provideHttpClient, withFetch } from '@angular/common/http';
+import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { provideRouter, withComponentInputBinding, withInMemoryScrolling } from '@angular/router';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { MatIconRegistry } from '@angular/material/icon';
@@ -10,6 +10,7 @@ import localeEsPE from '@angular/common/locales/es-PE';
 
 import { routes } from './app.routes';
 import { AuthStore } from './iam/application/auth.store';
+import { bearerTokenInterceptor } from './iam/infrastructure/bearer-token.interceptor';
 import { CredentialsNotifications } from './credentials/application/credentials-notifications';
 import { IotNotifications } from './iot-monitoring/application/iot-notifications';
 import { LanguageService } from './shared/application/language.service';
@@ -22,7 +23,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes, withComponentInputBinding(), withInMemoryScrolling({ scrollPositionRestoration: 'top' })),
-    provideHttpClient(withFetch()),
+    provideHttpClient(withFetch(), withInterceptors([bearerTokenInterceptor])),
     provideTranslateService({
       loader: provideTranslateHttpLoader({ prefix: '/i18n/', suffix: '.json' }),
       fallbackLang: 'es',

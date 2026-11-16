@@ -9,6 +9,6 @@ export class CampusSettingsApi {
   private readonly http = inject(HttpClient);
 
   get(): Observable<CampusSettings> {
-    return this.http.get<CampusSettings>(`${environment.apiBaseUrl}/settings`);
+    return this.http.get<CampusSettings>(`${environment.legacyApiBaseUrl}/settings`);
   }
 }
