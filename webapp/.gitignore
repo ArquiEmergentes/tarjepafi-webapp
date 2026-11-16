@@ -42,3 +42,10 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+# Testing BDD (Playwright)
+/e2e/.db
+/.features-gen
+/playwright-report
+/test-results
+/cucumber-report

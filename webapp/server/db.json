@@ -6959,7 +6959,7 @@
       "name": "Torniquete Salida 2",
       "deviceType": "TURNSTILE",
       "spaceId": "sp-sal-01",
-      "status": "ACTIVE",
+      "status": "OFFLINE",
       "configuration": {
         "readerMode": "ACCESS_CONTROL",
         "communicationInterval": 30,
@@ -8181,6 +8181,14 @@
       "detectedAt": "2026-10-06T08:00:00",
       "description": "Intervalo de heartbeat menor al de comunicación.",
       "resolvedAt": "2026-10-06T08:20:00"
+    },
+    {
+      "id": "inc-mwd5x0145ea2440b",
+      "readerId": "RDR-T-004",
+      "type": "DEVICE_OFFLINE",
+      "detectedAt": "2026-10-07T09:50:00",
+      "description": "El lector no envía heartbeats desde 2026-10-07 09:40.",
+      "resolvedAt": null
     }
   ],
   "cardTapEvents": [
@@ -17261,6 +17269,33 @@
         "sessionId": "ses-06-7",
         "role": "STUDENT",
         "status": "ABSENT"
+      }
+    },
+    {
+      "id": "dr-mwd5x00e635bc52f",
+      "eventId": "evt-mwd5x00e9e683398",
+      "sourceContext": "IOT_MONITORING",
+      "dataType": "DEVICE_TELEMETRY",
+      "subjectId": "RDR-T-004",
+      "occurredAt": "2026-10-07T09:50:00",
+      "recordedAt": "2026-10-07T09:50:00",
+      "payload": {
+        "fromStatus": "ACTIVE",
+        "toStatus": "OFFLINE",
+        "action": "CONNECTION_LOST"
+      }
+    },
+    {
+      "id": "dr-mwd5x01s7ebfc666",
+      "eventId": "evt-mwd5x01sf3b8709e",
+      "sourceContext": "IOT_MONITORING",
+      "dataType": "DEVICE_TELEMETRY",
+      "subjectId": "RDR-T-004",
+      "occurredAt": "2026-10-07T09:50:00",
+      "recordedAt": "2026-10-07T09:50:00",
+      "payload": {
+        "incidentType": "DEVICE_OFFLINE",
+        "incidentId": "inc-mwd5x0145ea2440b"
       }
     }
   ],
