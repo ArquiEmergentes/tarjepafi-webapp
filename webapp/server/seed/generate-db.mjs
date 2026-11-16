@@ -5,8 +5,7 @@ import { writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-// Ruta de salida opcional: los tests BDD generan su propia base (node generate-db.mjs e2e/.db/db.e2e.json).
-const OUT = process.argv[2] ?? join(dirname(fileURLToPath(import.meta.url)), '..', 'db.json');
+const OUT = join(dirname(fileURLToPath(import.meta.url)), '..', 'db.json');
 
 // ---------- utilidades deterministas ----------
 let seed = 20262;
